@@ -1,0 +1,191 @@
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.InputMap;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
+
+
+@SuppressWarnings("serial")
+public class GameView extends JPanel{
+
+	private Graphics2D graphics;
+	
+	//Canvas Constants
+	private final int tile_size_x = 32;
+	private final int tile_size_y = 32;
+	private final int tiles_in_row;
+	private final int tiles_in_col;
+	
+	//Game Graphics
+	private BufferedImage image_block;
+	private BufferedImage bi;
+
+	//Build Game Objects Container
+	private GameObjectsGrid gameObjectsGrid;
+	
+	//Key Action Manager
+	private KeyActionManager keyActionManager = new KeyActionManager();    
+	
+	//Key Bindings
+		InputMap inputMap;
+	    ActionMap actionMap;
+	
+	public GameView(int tiles_x, int tiles_y){
+			//Set Default Values
+			this.tiles_in_row = tiles_x;
+			this.tiles_in_col = tiles_y;
+		
+		
+		   //Set up JPanel
+		   this.setSize(getViewSizeX(), getViewSizeY());
+		   this.setBackground(Color.blue);
+		   this.setOpaque(true);
+		   
+	       //Load Graphics
+	       try {                
+	           image_block = ImageIO.read(new File("./resources/sprites/block.png"));
+	        } catch (IOException ex) {
+	             System.out.println("Exception: " + ex);
+	        }
+	       
+	       //Set Key Bindings
+	       inputMap = this.getInputMap();
+	       actionMap = this.getActionMap();
+		       
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_W,0), "move_left");
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R,0), "move_right");
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_E,0), "move_up");
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_D,0), "move_down");
+	
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_S,0), "fire_left");
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F,0), "fire_right");
+	       
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X,0), "self_destruct");
+	       
+	       //Set KeyAction Managers
+	       actionMap = this.getActionMap();
+	       actionMap.put("move_left", keyActionManager.add(EnumConsts.Player_Action.Move_Left));  
+	       actionMap.put("move_right", keyActionManager.add(EnumConsts.Player_Action.Move_Right));
+	       actionMap.put("move_up", keyActionManager.add(EnumConsts.Player_Action.Move_Up));
+	       actionMap.put("move_down", keyActionManager.add(EnumConsts.Player_Action.Move_Down));
+	       
+	       actionMap.put("fire_left", keyActionManager.add(EnumConsts.Player_Action.Fire_Left));  
+	       actionMap.put("fire_right", keyActionManager.add(EnumConsts.Player_Action.Fire_Right));
+	       
+	       actionMap.put("self_destruct", keyActionManager.add(EnumConsts.Player_Action.Self_Destruct));
+	}   
+	public void drawing(GameObjectsGrid gog){
+		//System.out.println("Drawing...");
+		this.gameObjectsGrid = gog;
+	      try {
+	    	  image_block = ImageIO.read(new File("./resources/sprites/block.png"));
+	      } catch(IOException e) {
+	         System.out.println("failed");
+	      }
+	      //System.out.println("Image Width: " + image_block.getWidth());
+	      //System.out.println("Image Height: " + image_block.getHeight());
+	      repaint();
+	   }
+
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        
+        if(this.gameObjectsGrid == null){
+        	return;
+        }
+        //System.out.println("before paint loop...");
+        GridCell grid_cell = gameObjectsGrid.getNext();
+        while(grid_cell != null){
+        	for(int i=0; i<grid_cell.size(); i++){
+        		Graphics2D g2d = (Graphics2D) g.create();
+        		GameObject go = grid_cell.getAt(i);
+        		if(go != null){
+	            	if(go.getDefaultImage() != null){
+	            		int[] offset = go.getOffset(tile_size_x, tile_size_y);
+	        		//System.out.println("gride_cell.getAt" + i + "): " + go.getDefaultImage().toString());
+	            	g.drawImage(go.getCurrentImage(), tile_size_x*grid_cell.getX() + offset[0], tile_size_y*grid_cell.getY() + offset[1], null);
+	
+	            	}else{
+	            		//System.out.println("null at: " + go.getX());
+	            	}
+        		}	
+            	g2d.dispose();
+            	
+        	}
+        	grid_cell.reset();
+        	grid_cell = gameObjectsGrid.getNext();
+        }
+        gameObjectsGrid.reset();
+        
+        
+    }
+    
+	@Override
+    public Dimension getPreferredSize() {
+        if (isPreferredSizeSet()) {
+            return super.getPreferredSize();
+        }
+        return new Dimension(tile_size_y * tiles_in_col, tile_size_x * tiles_in_row);
+    }
+
+	public int getViewSizeX() {
+		return tiles_in_row * tile_size_x;
+	}
+	public int getViewSizeY() {
+		return tiles_in_col * tile_size_y;
+	}
+    private class Action extends AbstractAction {
+
+        private EnumConsts.Player_Action action;
+        
+        Action(EnumConsts.Player_Action action) {
+            this.action = action;
+        }
+
+		@Override
+        public void actionPerformed(ActionEvent e) {
+        	switch (action){
+        		case Move_Left:
+        			System.out.println("Move Left");
+        			//next_action = action;
+        			break;
+        		case Move_Right:
+        			System.out.println("Move Right");
+        			//next_action = action;
+        			break;
+        		case Fire_Left:
+        			System.out.println("Fire Left");
+        			//next_action = action;
+        			break;
+        		case Fire_Right:
+        			System.out.println("Fire Right");
+        			//next_action = action;
+        			break;
+        		default:
+        			System.out.println("Invalid Input");
+        			break;
+        	}
+        }
+    }
+	public KeyActionManager getActionManager() {
+		System.out.println("GameView's view of keyactionmanager: " + keyActionManager.getList().toString());
+
+		return this.keyActionManager;
+	}
+}
