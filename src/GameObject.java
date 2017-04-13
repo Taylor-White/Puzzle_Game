@@ -13,13 +13,15 @@ public abstract class GameObject {
 	boolean isGround;
 	boolean isBreakable;
 	boolean isTraversable;
+	boolean isItem;
 	
-	public GameObject(BufferedImage imgList, boolean isGround, boolean isTraversable, boolean isBreakable, EnumConsts.Object_Name n){
+	public GameObject(BufferedImage imgList, boolean isGround, boolean isTraversable, boolean isBreakable, boolean isItem, EnumConsts.Object_Name n){
 		this.name = n;
 		this.image_frames = imgList;
 		this.isGround = isGround;
 		this.isBreakable = isBreakable;
 		this.isTraversable = isTraversable;
+		this.isItem = isItem;
 		return;
 	}
 	
@@ -58,6 +60,15 @@ public abstract class GameObject {
 	}
 	public int[] getOffset(int tile_size_x, int tile_size_y){
 		return new int[]{0,0};
+	}
+
+	public boolean isItem() {
+		return isItem;
+	}
+
+	public int getItemNumber() {
+		// TODO Auto-generated method stub
+		return -1;
 	}
 
 }

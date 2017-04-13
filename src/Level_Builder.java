@@ -1,43 +1,93 @@
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
-public class Future_Levels {
+public class Level_Builder implements Runnable {
 
 	private GameObjectsGrid current_level_unaltered;
+	private Player cur_player;
+	private int cur_player_x;
+	private int cur_player_y;
+	private int cur_coin_count;
+	private ArrayList<GameObject> current_level_moving_objects = new ArrayList<GameObject>();
 	private GameObjectsGrid next_level;
+	private Player next_player;
+	private int next_player_x;
+	private int next_player_y;
+	private int nxt_coin_count;
+	private ArrayList<GameObject> next_level_moving_objects = new ArrayList<GameObject>();
 	private final int tiles_in_row;
 	private final int tiles_in_col;
+	private int level_number;
+	
+	private Level_Details this_level;
+	//// ADD THIS LATER
+	
+	private boolean lock = false;
 	
 	//ImageList
 	private ImageList imgList;
+
 		
-	public Future_Levels(int x_tiles, int y_tiles, ImageList il){
+	public Level_Builder(int x_tiles, int y_tiles, ImageList il){
 		//Setup Variables
 		this.tiles_in_row = x_tiles;
 		this.tiles_in_col = y_tiles;
 		this.imgList = il;
+		this.level_number = 1;
+		cur_player = null;
+		cur_player_x = 0;
+		cur_player_y = 0;
+		getLevel(level_number, true);
 	}
+	
 	public void setLevel(int i){
-		
+		level_number = i;
 	}
+
 	public GameObjectsGrid getCurrentLevel(){
 		return current_level_unaltered;
+	}
+	public int getCurPlayerX(){
+		return cur_player_x;
+	}
+	public int getCurPlayerY(){
+		return cur_player_y;
+	}
+	public Player getCurPlayer(){
+		return cur_player;
+	}
+	public int getCurCoinCount(){
+		return cur_coin_count;
+	}
+	public int getNextPlayerX(){
+		return next_player_x;
+	}
+	public int getNextPlayerY(){
+		return next_player_y;
+	}
+	public Player getNextPlayer(){
+		return next_player;
+	}
+	public int getNextCoinCount(){
+		return nxt_coin_count;
 	}
 	public GameObjectsGrid getNextLevel(){
 		return next_level;
 	}
 	//Convert File Data to GameObject 2D Array
-	private GridCell[][] parseLevel(String from_file) {
-		GameObjectsGrid level_object = null;
+	private GameObjectsGrid parseLevel(String from_file, boolean isCurr) {
+		GameObjectsGrid level_object = new GameObjectsGrid();
 		System.out.println("from_file string: \n" + from_file);
 		String[] parts = from_file.split("\n");
 		GridCell[][] level_array = new GridCell[tiles_in_row][tiles_in_col];
 		int p_x = 0;
 		int p_y = 0;
 		Player p = null;
+		int cc = 0;
 		for(int y=0; y<parts.length; y++){
 			String[] cell = parts[y].split(",");
 			//System.out.println("row length: " + cell.length);
@@ -55,7 +105,7 @@ public class Future_Levels {
 						EnumConsts.Object_Name name = null;
 						String object_char = depth[c];
 						char ch = object_char.charAt(0);
-						System.out.println("ch: " + (int)ch);
+						//System.out.println("ch: " + (int)ch);
 						
 						///////////////////////////
 						switch (ch) {
@@ -88,6 +138,7 @@ public class Future_Levels {
 				            	}else{
 				            		System.out.println("error::::::");
 				            	}
+				            	cc++; //Increment coin count
 
 		                    break;
 				            case 'p':  
@@ -100,7 +151,7 @@ public class Future_Levels {
 				            	p = new Player(img_set);
 				            	new_cell.add(p);
 				            break; 
-				            case 'd':  
+				            case 'e':  
 				            	img_set = imgList.getExit();
 				            	name = EnumConsts.Object_Name.Exit;
 				            	new_cell.add(new Exit(img_set));
@@ -108,6 +159,11 @@ public class Future_Levels {
 				            case 'l':  
 				            	img_set = imgList.getLadder();
 				            	new_cell.add(new Ladder(img_set));
+				            break; 
+				            case 'd':  
+				            	object_char = object_char.substring(1);
+				            	img_set = imgList.getDynamite();
+				            	new_cell.add(new Dynamite(img_set, Integer.parseInt(object_char), false));
 				            break; 
 				            default: 
 				            	img_set = null;
@@ -123,16 +179,32 @@ public class Future_Levels {
 				}
 			}
 		}
-		level_object.setGameObjectGrid(level_array, p_x, p_y, p);
+		level_object.setGameObjectGrid(level_array);
+		if(isCurr){
+			this.cur_player = p;
+			this.cur_player_x = p_x;
+			this.cur_player_y = p_y;
+			this.cur_coin_count = cc;
+			current_level_unaltered = level_object;
+		}else{
+			this.next_player = p;
+			this.next_player_x = p_x;
+			this.next_player_y = p_y;
+			this.nxt_coin_count = cc;
+			next_level = level_object;
+		}
+		
 		System.out.println("done parsing level...");
-		return level_array;
+		return level_object;
 		
 	}
 			
 	//Gets GameObject[][] from a level number
-	public GridCell[][] getLevel(int level){
+	public GameObjectsGrid getLevel(int level, boolean isCurr){
 		String from_file = getStringFromFile(level);
-		GridCell[][] level_array = parseLevel(from_file);
+		GameObjectsGrid level_array = parseLevel(from_file, isCurr);
+		System.out.println("IN LEVEL BUILDER");
+		level_array.printGrid();
 		return level_array;
 	}
 	
@@ -163,6 +235,19 @@ public class Future_Levels {
 		finally{
 			sc.close();
 		}
+	}
+
+	@Override
+	public void run() {
+		lock = true;
+		current_level_unaltered = getLevel(level_number, true);
+		next_level = getLevel(level_number+1, false);
+		lock = false;
+	}
+
+	public boolean getLock() {
+		// TODO Auto-generated method stub
+		return lock;
 	}
 	
 }

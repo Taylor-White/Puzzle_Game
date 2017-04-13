@@ -1,7 +1,9 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -14,8 +16,10 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
+import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -25,6 +29,12 @@ import javax.swing.KeyStroke;
 public class GameView extends JPanel{
 
 	private Graphics2D graphics;
+	
+	private final int ITEM_WINDOW = 2;
+	
+	//Inventory Labels
+	ArrayList<JLabel> item_label;
+	
 	
 	//Canvas Constants
 	private final int tile_size_x = 32;
@@ -51,11 +61,19 @@ public class GameView extends JPanel{
 			this.tiles_in_row = tiles_x;
 			this.tiles_in_col = tiles_y;
 		
-		
+			//Set item labels
+			item_label = new ArrayList<JLabel>();
+			
+			this.setLayout(new BorderLayout());
+			
+			setupInventoryWindow("Inventory");
+
 		   //Set up JPanel
 		   this.setSize(getViewSizeX(), getViewSizeY());
 		   this.setBackground(Color.blue);
 		   this.setOpaque(true);
+		   
+		   //this.pack();
 		   
 	       //Load Graphics
 	       try {                
@@ -188,4 +206,68 @@ public class GameView extends JPanel{
 
 		return this.keyActionManager;
 	}
+	
+	private void setupInventoryWindow(String s) {
+		JPanel inventory_panel = new JPanel();
+		inventory_panel.setBackground(Color.RED);
+		inventory_panel.setPreferredSize(new Dimension(ITEM_WINDOW*32, ITEM_WINDOW*32));
+		
+		JLabel item_1 = new JLabel();
+		JLabel item_2 = new JLabel();
+		JLabel item_3 = new JLabel();
+		JLabel item_4 = new JLabel();
+		
+		JLabel number_left_1;
+		JLabel number_left_2;
+		JLabel number_left_3;
+		JLabel number_left_4;
+		
+		number_left_1 = new JLabel("0");
+		number_left_2 = new JLabel("0");
+		number_left_3 = new JLabel("0");
+		number_left_4 = new JLabel("0");
+		
+		item_label.add(number_left_1);
+		item_label.add(number_left_2);
+		item_label.add(number_left_3);
+		item_label.add(number_left_4);
+		
+		number_left_1.setFont (number_left_1.getFont ().deriveFont (16.0f));
+		number_left_2.setFont (number_left_2.getFont ().deriveFont (16.0f));
+		number_left_3.setFont (number_left_3.getFont ().deriveFont (16.0f));
+		number_left_4.setFont (number_left_4.getFont ().deriveFont (16.0f));
+		
+		
+		ImageIcon explosive_h = new ImageIcon("./resources/sprites/inventory/explosive_h.png");
+		ImageIcon explosive_v = new ImageIcon("./resources/sprites/inventory/explosive_v.png");
+		ImageIcon explosive_o = new ImageIcon("./resources/sprites/inventory/explosive_o.png");
+		ImageIcon explosive_c = new ImageIcon("./resources/sprites/inventory/explosive_c.png");
+		
+		item_1.setIcon(explosive_h);
+		item_2.setIcon(explosive_v);
+		item_3.setIcon(explosive_o);
+		item_4.setIcon(explosive_c);
+		
+		
+		inventory_panel.add(new JLabel(s + ":"));
+		inventory_panel.add(item_1);
+		inventory_panel.add(number_left_1);
+		inventory_panel.add(item_2);
+		inventory_panel.add(number_left_2);
+		inventory_panel.add(item_3);
+		inventory_panel.add(number_left_3);
+		inventory_panel.add(item_4);
+		inventory_panel.add(number_left_4);
+		
+		this.add(inventory_panel, BorderLayout.SOUTH);
+		
+	}
+	
+	public void setItemNumber(int i, int x){
+		JLabel label = item_label.get(i);
+		label.setText(String.valueOf(x));
+		item_label.set(i, label);
+		return;
+	}
+
 }

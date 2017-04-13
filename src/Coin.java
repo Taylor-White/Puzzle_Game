@@ -9,11 +9,9 @@ public class Coin extends GameObject {
 	private int[] animation_lengths;
 	private int idle_timer;
 	private final static int TIME_TO_IDLE_ANIMATION = 12;
-	public static int coin_count = 0;
 	
 	public Coin(BufferedImage imgList){
-		super(imgList, false, true, true, EnumConsts.Object_Name.Coin);
-		coin_count++;
+		super(imgList, false, true, true, false, EnumConsts.Object_Name.Coin);
 		animation_lengths = new int[2];
 		animation_lengths[0] = 6;
 		animation_lengths[1] = 3;
@@ -48,13 +46,8 @@ public class Coin extends GameObject {
 	}
 	
 	public boolean destroy(){
-		System.out.println("COIN DESTROY!!!!!!!!!!!");
-		coin_count--;
-		if(coin_count == 0){System.out.println("COINS ALL GONE!!!!");}
 		return true;
 	}
 	
-	public static int getCoinCount(){
-		return coin_count;
-	}
+
 }

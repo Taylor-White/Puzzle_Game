@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 
 
+
 public class GameObjectsGrid {
 
 	private GridCell[][] gameObjectGrid;
@@ -76,6 +77,18 @@ public class GameObjectsGrid {
 		}
 		return false;
 	}
+	public GameObject isItem(int x, int y) {
+		if(gameObjectGrid[x][y] == null){return null;}
+		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
+		
+		for(int i=0; i<list.size(); i++){
+			//System.out.println(list.get(i).toString());
+			if(list.get(i).isItem()){
+				return list.get(i);
+			}
+		}
+		return null;
+	}
 	public boolean isTraversable(int x, int y) {
 		if(gameObjectGrid[x][y] == null){return false;}
 		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
@@ -105,6 +118,32 @@ public class GameObjectsGrid {
 		return true;
 	}
 
+	/*public void movePlayer(EnumConsts.Direction d) {
+		EnumConsts.Object_Name n = EnumConsts.Object_Name.Player;
+		int to_x = player_x; 
+		int to_y = player_y; 
+		switch (d) {
+		case Left:
+			to_x--;
+			break; 
+		case Right:
+			to_x++;
+			break;
+		case Up:
+			to_y--;
+			break;
+		case Down:
+			to_y++;
+			break;
+		default:
+			break;
+		}	
+		GameObject player = gameObjectGrid[player_x][player_y].remove(n);
+		gameObjectGrid[to_x][to_y].add(player);
+		this.player_x = to_x;
+		this.player_y = to_y;
+	}*/
+	
 	public void movePlayerTo(int from_x, int from_y, int to_x, int to_y) {
 		EnumConsts.Object_Name n = EnumConsts.Object_Name.Player;
 		//System.out.println("Remove player from...");
@@ -188,11 +227,21 @@ public class GameObjectsGrid {
 				if(isRemove){
 					list.remove(i);
 				}
+			}else if(list.get(i).getName() == EnumConsts.Object_Name.Dynamite){
+				System.out.println("Removing dynamite item");
+				boolean isRemove = list.get(i).destroy();
+				System.out.println("isRemove boolean : " + isRemove);
+				if(isRemove){
+					list.remove(i);
+					System.out.println("Removing dynamite item!!!!!!!!!!!");
+				}
 			}
 		}
 		return;
 		
 	}
+
+
 
 
 
