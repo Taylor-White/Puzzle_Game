@@ -30,6 +30,7 @@ public class GameProcessing{
 	//Level Stuff
 	private Level_Builder level_builder;
 	private int level_int = 1;
+	private boolean restart = false;
 
 
 	
@@ -62,57 +63,65 @@ public class GameProcessing{
 		EnumConsts.Player_Action next_action;
 		//this.current_level = level_builder.getLevel(level_int, true);
 		//level_builder.getLevel(level_int+1, false);
-		new Thread(level_builder).start();
-		while(level_builder.getLock()){
-			try {
-				Thread.sleep(5);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		this.current_level = level_builder.getCurrentLevel();
-		this.player = level_builder.getCurPlayer();
-		this.player_x = level_builder.getCurPlayerX();
-		this.player_y = level_builder.getCurPlayerY();
-		System.out.println("gameView: " + gameView.toString());
-		gameView.drawing(current_level);
-		
 		while(true){
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			input_blocked = player.getLock();
-			adjust_positions();
-			//Fix for Idle Climbing Animation ~~~
-			if(!current_level.isGround(player_x, player_y) && player.is_idle_climb()){
-				player.stand();
-			}if(current_level.isGround(player_x, player_y) && player.is_standing()){
-				player.idle_climb();
-			}
-			
-			checkPlayerCollisions(); 
-			
-			if(!input_blocked && shouldFall(player_x, player_y)){
-				start_fall(player_x, player_y, EnumConsts.Object_Name.Player);	
-			}else if(!input_blocked){
-				next_action = keyActionManager.getNext();
-				if(next_action != null){
-					perform_action(next_action);
-					next_action = null;
+			new Thread(level_builder).start();
+			while(level_builder.getLock()){
+				try {
+					Thread.sleep(5);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
-			checkPlayerCollisions();
-			
-			//checkPlayerDeath();
-			current_level.increment_animations();
+			this.current_level = level_builder.getCurrentLevel();
+			this.player = level_builder.getCurPlayer();
+			this.player_x = level_builder.getCurPlayerX();
+			this.player_y = level_builder.getCurPlayerY();
+			System.out.println("gameView: " + gameView.toString());
 			gameView.drawing(current_level);
-			//End Loop
+			
+			while(true){
+				try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				input_blocked = player.getLock();
+				adjust_positions();
+				//Fix for Idle Climbing Animation ~~~
+				if(!current_level.isGround(player_x, player_y) && player.is_idle_climb()){
+					player.stand();
+				}if(current_level.isGround(player_x, player_y) && player.is_standing()){
+					player.idle_climb();
+				}
+				
+				checkPlayerCollisions(); 
+				
+				if(!input_blocked && shouldFall(player_x, player_y)){
+					start_fall(player_x, player_y, EnumConsts.Object_Name.Player);	
+				}else if(!input_blocked){
+					next_action = keyActionManager.getNext();
+					if(next_action != null){
+						perform_action(next_action);
+						next_action = null;
+					}
+				}
+				checkPlayerCollisions();
+				
+				//checkPlayerDeath();
+				//if player dies, break loop and restart level
+				if(restart){
+					restart = false;
+					break;
+				}
+				current_level.increment_animations();
+				gameView.drawing(current_level);
+				//End Loop
+			}
+			System.out.println("THIS IS DONE");
+			level_builder.setLevel(1);
 		}
-		
 	}
 	
 
@@ -125,7 +134,7 @@ public class GameProcessing{
 			item_update(item_number, true);
 		}
 		current_level.checkPlayerCollisions(player_x,player_y);
-		
+		checkPlayerDeath();
 	}
 	private void adjust_positions() {
 		//for(objects in grid that can move)
@@ -164,6 +173,7 @@ public class GameProcessing{
 		if(!current_level.isTraversable(player_x, player_y)){
 			//PlayerDeath!!!
 			System.out.println("Player Dead");
+			this.restart = true;
 		}
 		
 	}
@@ -218,9 +228,11 @@ public class GameProcessing{
 	private void Self_Destruct(EnumConsts.Player_Action action) {
 		// CURRENTLY PRINTS OUT NEXT LEVEL
 		//level_builder.getNextLevel().printGrid();
-
-		item_update(0, true);
+		
+		//item_update(0, true);
 		System.out.println("Player Explode");
+		
+		this.restart = true;
 		
 	}
 	public void paintThisFrame(){
