@@ -1,3 +1,4 @@
+//Copyright Taylor White, 2017
 
 public class Main
 {
@@ -8,7 +9,7 @@ public class Main
 	public static void main(String args[])
 	{
 		BuildApplication app = new BuildApplication("Game");
-		app.run();
+		//app.run();
 	}
 
 }

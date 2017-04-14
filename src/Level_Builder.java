@@ -246,7 +246,6 @@ public class Level_Builder implements Runnable {
 	}
 
 	public boolean getLock() {
-		// TODO Auto-generated method stub
 		return lock;
 	}
 	

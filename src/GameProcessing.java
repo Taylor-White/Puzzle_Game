@@ -1,7 +1,4 @@
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+
 
 public class GameProcessing{
 	private GameObjectsGrid current_level;
@@ -61,9 +58,8 @@ public class GameProcessing{
 	}
 	public void run(){
 		EnumConsts.Player_Action next_action;
-		//this.current_level = level_builder.getLevel(level_int, true);
-		//level_builder.getLevel(level_int+1, false);
 		while(true){
+			level_builder.setLevel(level_int);
 			new Thread(level_builder).start();
 			while(level_builder.getLock()){
 				try {
@@ -84,7 +80,6 @@ public class GameProcessing{
 				try {
 					Thread.sleep(50);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				input_blocked = player.getLock();
@@ -113,6 +108,7 @@ public class GameProcessing{
 				//if player dies, break loop and restart level
 				if(restart){
 					restart = false;
+					reset_items();
 					break;
 				}
 				current_level.increment_animations();
@@ -125,6 +121,12 @@ public class GameProcessing{
 	}
 	
 
+	private void reset_items() {
+		for(int i = 0; i<4; i++){
+			gameView.setItemNumber(i,0);
+			items[i] = 0;
+		}
+	}
 	private void checkPlayerCollisions() {
 		int item_number;
 		GameObject item = current_level.isItem(player_x,  player_y);

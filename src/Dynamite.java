@@ -26,7 +26,6 @@ public class Dynamite extends GameObject{
 	public void animate(){
 		if(isIgnited){
 				setNextFrame();
-			
 		}
 		return;
 	}
@@ -34,8 +33,6 @@ public class Dynamite extends GameObject{
 	public int getType(){
 		return this.frame_y;
 	}
-	
-
 	
 	private void setNextFrame() {
 		if(current_frame_delay_counter == 0){
