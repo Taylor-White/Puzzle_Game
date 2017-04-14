@@ -1,4 +1,6 @@
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
 
 
 
@@ -220,24 +222,24 @@ public class GameObjectsGrid {
 		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
 
 		for(int i=0; i<list.size(); i++){
-			//System.out.println(list.get(i).toString());
-			if(list.get(i).getName() == EnumConsts.Object_Name.Coin){
+			GameObject obj = list.get(i);
+			if(obj.getName() == EnumConsts.Object_Name.Coin){
 				boolean isRemove = list.get(i).destroy();
 				if(isRemove){
 					list.remove(i);
 				}
-			}else if(list.get(i).getName() == EnumConsts.Object_Name.Dynamite){
-				System.out.println("Removing dynamite item");
+			}else if(obj.getName() == EnumConsts.Object_Name.Dynamite  && obj.isItem()){
 				boolean isRemove = list.get(i).destroy();
-				System.out.println("isRemove boolean : " + isRemove);
 				if(isRemove){
 					list.remove(i);
-					System.out.println("Removing dynamite item!!!!!!!!!!!");
 				}
 			}
 		}
 		return;
 		
+	}
+	public void add(int x, int y, int type, BufferedImage bufferedImage) {
+		gameObjectGrid[x][y].add(new Dynamite(bufferedImage, type, true));
 	}
 
 

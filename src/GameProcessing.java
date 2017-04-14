@@ -1,5 +1,6 @@
 
 
+
 public class GameProcessing{
 	private GameObjectsGrid current_level;
 	
@@ -29,10 +30,6 @@ public class GameProcessing{
 	private int level_int = 1;
 	private boolean restart = false;
 
-
-	
-
-    
 	public GameProcessing(int x_tiles, int y_tiles, GameView gv){
 		//Setup Variables
 		this.tiles_in_row = x_tiles;
@@ -41,8 +38,8 @@ public class GameProcessing{
 		//Set Game View
 		this.gameView = gv;
 		
+		//Action Manager
 		this.keyActionManager = gv.getActionManager();
-		System.out.println("GameProcessing view of keyactionmanager: " + keyActionManager.getList().toString());
 		
 		//Setup Graphics
 		this.imgList = new ImageList();
@@ -51,9 +48,14 @@ public class GameProcessing{
 		
 		//Initialize current level to '1'
 		level_int = 1;
+		
+		//Blank Level
 		this.current_level = new GameObjectsGrid();
 		
+		//Build Level
 		level_builder = new Level_Builder(x_tiles, y_tiles, imgList);
+		
+		//Set Inventory to Empty
 		items = new int[]{0,0,0,0};
 	}
 	public void run(){
@@ -65,7 +67,6 @@ public class GameProcessing{
 				try {
 					Thread.sleep(5);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -131,7 +132,6 @@ public class GameProcessing{
 		int item_number;
 		GameObject item = current_level.isItem(player_x,  player_y);
 		if(item != null){
-			System.out.println("tell me the item isn'tnull");
 			item_number = item.getItemNumber();
 			item_update(item_number, true);
 		}
@@ -210,13 +210,43 @@ public class GameProcessing{
 			case Self_Destruct:
 				Self_Destruct(action);
 				break;
+			case Drop_Item:
+				Drop_Item(action);
+				break;
 			default:
 				System.out.println("Invalid action");
-				break;
-					
+				break;	
 		}
 	}
 	
+	private void Drop_Item(EnumConsts.Player_Action action) {
+		// Use player action to determine which type of dynamite to drop
+		System.out.println("Dropping item");
+		if(items[0] > 0){
+			item_update(0, false);
+			boolean already_dropped = false;
+			//Drop item in direction player is facing.  If player is facing up/down or the spot for the item to land is impassible, drop item on player
+			if(player.getDirection() == EnumConsts.Direction.Left){
+				if(current_level.isTraversable(player_x-1, player_y)){
+					current_level.add(player_x-1, player_y, 0, imgList.getDynamite());
+					already_dropped = true;
+				}else{
+					already_dropped = false;
+				}
+			}else if(player.getDirection() == EnumConsts.Direction.Right){
+				if(current_level.isTraversable(player_x+1, player_y)){
+					current_level.add(player_x+1, player_y, 0, imgList.getDynamite());
+					already_dropped = true;
+				}else{
+					already_dropped = false;
+				}
+			}
+			if(!already_dropped){
+				current_level.add(player_x, player_y, 0, imgList.getDynamite());
+			}
+			
+		}
+	}
 	private void item_update(int i, boolean inc){
 		System.out.println("Current num of items at: " + i + " is " + items[i]);
 		if(inc){
@@ -227,11 +257,10 @@ public class GameProcessing{
 		gameView.setItemNumber(i,items[i]);
 	}
 	
+	//THIS METHOD IS CURRENTLY BEING USED FOR TESTING ~
 	private void Self_Destruct(EnumConsts.Player_Action action) {
 		// CURRENTLY PRINTS OUT NEXT LEVEL
-		//level_builder.getNextLevel().printGrid();
 		
-		//item_update(0, true);
 		System.out.println("Player Explode");
 		
 		this.restart = true;

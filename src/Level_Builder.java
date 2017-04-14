@@ -24,7 +24,7 @@ public class Level_Builder implements Runnable {
 	private int level_number;
 	
 	private Level_Details this_level;
-	//// ADD THIS LATER
+	//// ADD THIS LATER ~ Will be an object containing the information about a level so the Game processing can request that object and parse it itself.
 	
 	private boolean lock = false;
 	
@@ -48,6 +48,7 @@ public class Level_Builder implements Runnable {
 		level_number = i;
 	}
 
+	//All these get methonds will not be necessary when I add the Level Details object
 	public GameObjectsGrid getCurrentLevel(){
 		return current_level_unaltered;
 	}
@@ -78,6 +79,8 @@ public class Level_Builder implements Runnable {
 	public GameObjectsGrid getNextLevel(){
 		return next_level;
 	}
+	
+	
 	//Convert File Data to GameObject 2D Array
 	private GameObjectsGrid parseLevel(String from_file, boolean isCurr) {
 		GameObjectsGrid level_object = new GameObjectsGrid();
@@ -90,50 +93,33 @@ public class Level_Builder implements Runnable {
 		int cc = 0;
 		for(int y=0; y<parts.length; y++){
 			String[] cell = parts[y].split(",");
-			//System.out.println("row length: " + cell.length);
 			for(int x=0; x<cell.length; x++){
 				String[] depth = cell[x].split(":");
-				//System.out.println("cell[" + x + "].split: " + cell[x]);
 				GridCell new_cell = new GridCell(x, y);
 				for(int c = 0; c<depth.length; c++){
-					//System.out.println("depth: " + depth.length);
 					try{
 						//Convert from char to image using Image List?
 						BufferedImage img_set = null;
-						boolean isGround = true;
-						boolean isBreakable = false;
-						EnumConsts.Object_Name name = null;
 						String object_char = depth[c];
 						char ch = object_char.charAt(0);
-						//System.out.println("ch: " + (int)ch);
-						
-						///////////////////////////
 						switch (ch) {
 				            case 'b':  
 				            	object_char = object_char.substring(1);
 								img_set = imgList.getBlock();
-				            	isGround = false;
-				            	name = EnumConsts.Object_Name.Block;
-				            	isBreakable = true;
 				            	new_cell.add(new Block(img_set, Integer.parseInt(object_char)));
 				            break;
 				            case 'i':  
 				            	img_set = imgList.getIndestructible();
-				            	isGround = false;
-				            	name = EnumConsts.Object_Name.Indestructable;
 				            	System.out.println("Getting I");
 				            	new_cell.add(new Indestructable(img_set));
 		            		break;
 				            case 'c':
+				            	//Change this to match with block
 				            	if(object_char.charAt(1) == '1'){
 				            		img_set = imgList.getCoin();
-					            	isGround = true;
-					            	name = EnumConsts.Object_Name.Coin;
 					            	new_cell.add(new Coin(img_set));
 				            	}else if(object_char.charAt(1) == '2'){
-				            		img_set = imgList.getCoin();
-					            	isGround = true;
-					            	name = EnumConsts.Object_Name.Coin;
+				            		img_set = imgList.getCoinAlternate();
 					            	new_cell.add(new Coin(img_set));
 				            	}else{
 				            		System.out.println("error::::::");
@@ -143,17 +129,14 @@ public class Level_Builder implements Runnable {
 		                    break;
 				            case 'p':  
 				            	img_set = imgList.getPlayer();
-				            	isGround = true;
 				            	p_x = x;
 				            	p_y = y;
-				            	name = EnumConsts.Object_Name.Player;
 				            	System.out.println("player coordinates: " + x + " " + y);
 				            	p = new Player(img_set);
 				            	new_cell.add(p);
 				            break; 
 				            case 'e':  
 				            	img_set = imgList.getExit();
-				            	name = EnumConsts.Object_Name.Exit;
 				            	new_cell.add(new Exit(img_set));
 				            break; 
 				            case 'l':  
@@ -169,10 +152,7 @@ public class Level_Builder implements Runnable {
 				            	img_set = null;
 				            break;
 				        }
-						//System.out.println("depth[c]: " + depth[c]);
-						
 						level_array[x][y] = new_cell;
-						//System.out.println("x: " + x + "\ny: " + y + "   image: " + level_array[x][y].getAt(0).getDefaultImage());
 					} catch (IllegalArgumentException e){
 						System.out.println("Invalid Format");
 					}

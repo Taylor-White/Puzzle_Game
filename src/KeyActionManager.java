@@ -1,6 +1,4 @@
-import java.awt.Desktop.Action;
 import java.awt.event.ActionEvent;
-import java.awt.List;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -29,9 +27,8 @@ public class KeyActionManager {
 		this.next_action = null;
 		return return_action;
 	}
-	//System.out.println("Next Action: " + next_action);
+
 	public Object getList() {
-		// TODO Auto-generated method stub
 		return keylist;
 	}
 	
@@ -45,39 +42,7 @@ public class KeyActionManager {
 
 		@Override
         public void actionPerformed(ActionEvent e) {
-        	switch (action){
-        		case Move_Left:
-        			//System.out.println("Move Left");
-        			KeyActionManager.this.next_action = action;
-        			break;
-        		case Move_Right:
-        			//System.out.println("Move Right");
-        			KeyActionManager.this.next_action = action;
-        			break;
-        		case Move_Up:
-        			//System.out.println("Move Left");
-        			KeyActionManager.this.next_action = action;
-        			break;
-        		case Move_Down:
-        			//System.out.println("Move Left");
-        			KeyActionManager.this.next_action = action;
-        			break;	
-        		case Fire_Left:
-        			//System.out.println("Fire Left");
-        			KeyActionManager.this.next_action = action;
-        			break;
-        		case Fire_Right:
-        			//System.out.println("Fire Right");
-        			KeyActionManager.this.next_action = action;
-        			break;
-        		case Self_Destruct:
-        			//System.out.println("Fire Right");
-        			KeyActionManager.this.next_action = action;
-        			break;
-        		default:
-        			//System.out.println("Invalid Input");
-        			break;
-        	}
+			KeyActionManager.this.next_action = action;
         	System.out.println("Next Action: " + KeyActionManager.this.next_action);
         }
     }

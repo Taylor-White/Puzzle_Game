@@ -70,11 +70,8 @@ public class GameView extends JPanel{
 
 		   //Set up JPanel
 		   this.setSize(getViewSizeX(), getViewSizeY());
-		   this.setBackground(Color.blue);
 		   this.setOpaque(true);
-		   
-		   //this.pack();
-		   
+		   		   
 	       //Load Graphics
 	       try {                
 	           image_block = ImageIO.read(new File("./resources/sprites/block.png"));
@@ -96,6 +93,8 @@ public class GameView extends JPanel{
 	       
 	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X,0), "self_destruct");
 	       
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_U,0), "drop_item");
+	       
 	       //Set KeyAction Managers
 	       actionMap = this.getActionMap();
 	       actionMap.put("move_left", keyActionManager.add(EnumConsts.Player_Action.Move_Left));  
@@ -107,17 +106,16 @@ public class GameView extends JPanel{
 	       actionMap.put("fire_right", keyActionManager.add(EnumConsts.Player_Action.Fire_Right));
 	       
 	       actionMap.put("self_destruct", keyActionManager.add(EnumConsts.Player_Action.Self_Destruct));
+	
+	       actionMap.put("drop_item", keyActionManager.add(EnumConsts.Player_Action.Drop_Item));
 	}   
 	public void drawing(GameObjectsGrid gog){
-		//System.out.println("Drawing...");
 		this.gameObjectsGrid = gog;
 	      try {
 	    	  image_block = ImageIO.read(new File("./resources/sprites/block.png"));
 	      } catch(IOException e) {
 	         System.out.println("failed");
 	      }
-	      //System.out.println("Image Width: " + image_block.getWidth());
-	      //System.out.println("Image Height: " + image_block.getHeight());
 	      repaint();
 	   }
 
@@ -168,39 +166,6 @@ public class GameView extends JPanel{
 	public int getViewSizeY() {
 		return tiles_in_col * tile_size_y;
 	}
-    private class Action extends AbstractAction {
-
-        private EnumConsts.Player_Action action;
-        
-        Action(EnumConsts.Player_Action action) {
-            this.action = action;
-        }
-
-		@Override
-        public void actionPerformed(ActionEvent e) {
-        	switch (action){
-        		case Move_Left:
-        			System.out.println("Move Left");
-        			//next_action = action;
-        			break;
-        		case Move_Right:
-        			System.out.println("Move Right");
-        			//next_action = action;
-        			break;
-        		case Fire_Left:
-        			System.out.println("Fire Left");
-        			//next_action = action;
-        			break;
-        		case Fire_Right:
-        			System.out.println("Fire Right");
-        			//next_action = action;
-        			break;
-        		default:
-        			System.out.println("Invalid Input");
-        			break;
-        	}
-        }
-    }
 	public KeyActionManager getActionManager() {
 		System.out.println("GameView's view of keyactionmanager: " + keyActionManager.getList().toString());
 
@@ -236,7 +201,6 @@ public class GameView extends JPanel{
 		number_left_2.setFont (number_left_2.getFont ().deriveFont (16.0f));
 		number_left_3.setFont (number_left_3.getFont ().deriveFont (16.0f));
 		number_left_4.setFont (number_left_4.getFont ().deriveFont (16.0f));
-		
 		
 		ImageIcon explosive_h = new ImageIcon("./resources/sprites/inventory/explosive_h.png");
 		ImageIcon explosive_v = new ImageIcon("./resources/sprites/inventory/explosive_v.png");

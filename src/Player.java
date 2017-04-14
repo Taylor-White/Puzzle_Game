@@ -55,7 +55,7 @@ public class Player extends GameObject {
         	if(EnumConsts.Direction.Left == direction){
         		setNextFrame();
             	timer--;
-            	//Done Falling
+            	//Done Walking
             	if(timer == 0){
             		lock = false;
             		player_state = Player_State.Stand;
@@ -66,7 +66,7 @@ public class Player extends GameObject {
         	}else{
         		setNextFrame();
             	timer--;
-            	//Done Falling
+            	//Done Walking
             	if(timer == 0){
             		lock = false;
             		player_state = Player_State.Stand;
@@ -109,7 +109,7 @@ public class Player extends GameObject {
         	if(EnumConsts.Direction.Up == direction){
         		setNextFrame();
             	timer--;
-            	//Done Falling
+            	//Done Climbing
             	if(timer == 0){
             		lock = false;
             		player_state = Player_State.Climb_Idle;
@@ -122,7 +122,7 @@ public class Player extends GameObject {
         	}else if(EnumConsts.Direction.Down == direction){
         		setNextFrame();
             	timer--;
-            	//Done Falling
+            	//Done Climbing
             	if(timer == 0){
             		lock = false;
             		player_state = Player_State.Climb_Idle;
@@ -135,7 +135,7 @@ public class Player extends GameObject {
         	}else if(EnumConsts.Direction.Right == direction){
         		setNextFrame();
             	timer--;
-            	//Done Falling
+            	//Done Climbing
             	if(timer == 0){
             		lock = false;
             		player_state = Player_State.Climb_Idle;
@@ -148,7 +148,7 @@ public class Player extends GameObject {
         	}else if(EnumConsts.Direction.Left == direction){
         		setNextFrame();
             	timer--;
-            	//Done Falling
+            	//Done Climbing
             	if(timer == 0){
             		lock = false;
             		player_state = Player_State.Climb_Idle;
@@ -185,7 +185,6 @@ public class Player extends GameObject {
 	}
 	
 	public BufferedImage getCurrentImage(){
-		//System.out.println("GETS THE CHILD");
 		return image_frames.getSubimage(frame_x * TILE_SIZE, frame_y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	}
 	
@@ -234,21 +233,15 @@ public class Player extends GameObject {
 		lock = true;
 	}
 	
-	/*public void walk(EnumConsts.Direction direction){
-		if(direction == EnumConsts.Direction.Left){
-			
-		}
-	}*/
 	
 	public boolean getLock(){
 		return lock;
 	}
 	
 	public int[] getOffset(int tile_size_x, int tile_size_y){
-		//System.out.println("Offset_y: " + offset_y);
 		return new int[]{offset_x,offset_y};
 	}
-	public boolean halfWayThere(){ //Living on a prayer
+	public boolean halfWayThere(){ 
 		if((timer == ACTION_TIME / 2) && offset_y < 0){
 			offset_y = TILE_SIZE / 2;
 			return true;
@@ -271,7 +264,6 @@ public class Player extends GameObject {
 
 	public void move(EnumConsts.Direction d) {
 		direction = d;
-		//if(player_state != Player_State.Walk){
 		if (direction == EnumConsts.Direction.Up){
 			frame_y = 10;
 			frame_x = 0;
@@ -303,7 +295,6 @@ public class Player extends GameObject {
 			
 			
 		}
-		//}	
 		timer = ACTION_TIME;
 		lock = true;
 		
