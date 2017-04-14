@@ -71,4 +71,17 @@ public abstract class GameObject {
 		return -1;
 	}
 
+	public boolean halfWayThere() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean isFalling() {
+		return false;
+	}
+	
+	public void startFalling(){
+		
+	}
+
 }

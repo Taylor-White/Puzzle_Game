@@ -16,8 +16,7 @@ public class GameObjectsGrid {
 	private int current_x = 0;
 	private int current_y = 0;
 	
-	public int player_x = 0;
-	public int player_y = 0;
+
 	
 	public Player player;
 	
@@ -26,12 +25,7 @@ public class GameObjectsGrid {
 	public void setGameObjectGrid(GridCell[][] gridCells) {
 		this.gameObjectGrid = gridCells;
 	}
-	public void setGameObjectGrid(GridCell[][] level_array, int p_x, int p_y, Player p) {
-		this.player_x = p_x;
-		this.player_y = p_y;
-		this.player = p;
-		
-	}
+
 	
 	public GridCell[][] getGameObjectGrid(){
 		return gameObjectGrid;
@@ -118,47 +112,17 @@ public class GameObjectsGrid {
 		}
 		return true;
 	}
-
-	/*public void movePlayer(EnumConsts.Direction d) {
-		EnumConsts.Object_Name n = EnumConsts.Object_Name.Player;
-		int to_x = player_x; 
-		int to_y = player_y; 
-		switch (d) {
-		case Left:
-			to_x--;
-			break; 
-		case Right:
-			to_x++;
-			break;
-		case Up:
-			to_y--;
-			break;
-		case Down:
-			to_y++;
-			break;
-		default:
-			break;
-		}	
-		GameObject player = gameObjectGrid[player_x][player_y].remove(n);
-		gameObjectGrid[to_x][to_y].add(player);
-		this.player_x = to_x;
-		this.player_y = to_y;
-	}*/
 	
-	public void movePlayerTo(int from_x, int from_y, int to_x, int to_y) {
-		EnumConsts.Object_Name n = EnumConsts.Object_Name.Player;
+	public void moveObjectTo(GameObject obj, int from_x, int from_y, int to_x, int to_y) {
 		//System.out.println("Remove player from...");
-		GameObject player = gameObjectGrid[from_x][from_y].remove(n);
-		gameObjectGrid[to_x][to_y].add(player);
-		this.player_x = to_x;
-		this.player_y = to_y;
+		gameObjectGrid[from_x][from_y].remove(obj);
+		gameObjectGrid[to_x][to_y].add(obj);
+		//ADD PLAYER_X AND PLAYER_Y CHANGES TO THIS
 	}
+	
 
 
-	public void setPlayerCoordinates(int x, int y){
-		this.player_x = x;
-		this.player_y = y;
-	}
+
 	public void printGrid(){
 		System.out.println("Printing Grid...");
 		for(int i=0; i<gameObjectGrid.length; i++){
@@ -238,9 +202,10 @@ public class GameObjectsGrid {
 		return;
 		
 	}
-	public void add(int x, int y, int type, BufferedImage bufferedImage) {
-		gameObjectGrid[x][y].add(new Dynamite(bufferedImage, type, true));
+	public void add(int x, int y, GameObject obj) {
+		gameObjectGrid[x][y].add(obj);
 	}
+
 
 
 

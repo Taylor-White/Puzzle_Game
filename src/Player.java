@@ -222,7 +222,7 @@ public class Player extends GameObject {
 			lock = true;
 		}	
 	}
-	public void falling(){
+	public void startFalling(){
 		if(player_state != Player_State.Fall){
 			frame_y = 14;
 			frame_x = 0;
@@ -233,6 +233,12 @@ public class Player extends GameObject {
 		lock = true;
 	}
 	
+	public boolean isFalling(){
+		if(player_state == Player_State.Fall){
+			return true;
+		}
+		return false;
+	}
 	
 	public boolean getLock(){
 		return lock;

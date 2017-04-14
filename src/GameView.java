@@ -93,7 +93,10 @@ public class GameView extends JPanel{
 	       
 	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_X,0), "self_destruct");
 	       
-	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_U,0), "drop_item");
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_U,0), "drop_item_0");
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_I,0), "drop_item_1");
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_O,0), "drop_item_2");
+	       inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_P,0), "drop_item_3");
 	       
 	       //Set KeyAction Managers
 	       actionMap = this.getActionMap();
@@ -107,7 +110,10 @@ public class GameView extends JPanel{
 	       
 	       actionMap.put("self_destruct", keyActionManager.add(EnumConsts.Player_Action.Self_Destruct));
 	
-	       actionMap.put("drop_item", keyActionManager.add(EnumConsts.Player_Action.Drop_Item));
+	       actionMap.put("drop_item_0", keyActionManager.add(EnumConsts.Player_Action.Drop_Item_0));
+	       actionMap.put("drop_item_1", keyActionManager.add(EnumConsts.Player_Action.Drop_Item_1));
+	       actionMap.put("drop_item_2", keyActionManager.add(EnumConsts.Player_Action.Drop_Item_2));
+	       actionMap.put("drop_item_3", keyActionManager.add(EnumConsts.Player_Action.Drop_Item_3));
 	}   
 	public void drawing(GameObjectsGrid gog){
 		this.gameObjectsGrid = gog;

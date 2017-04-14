@@ -34,10 +34,10 @@ public class GridCell {
 		this.i = 0;
 	}
 	
-	public GameObject remove(EnumConsts.Object_Name object_Name){
+	public GameObject remove(GameObject obj){
 		GameObject ob = null;
 		for(int i=0; i<list.size(); i++){
-			if(list.get(i).getName() == object_Name){
+			if(list.get(i) == obj){
 				System.out.println("Found Player");
 				ob = list.get(i);
 				list.remove(i);

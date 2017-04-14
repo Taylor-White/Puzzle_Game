@@ -2,11 +2,13 @@ import java.awt.image.BufferedImage;
 
 
 
+
 public class Dynamite extends GameObject{
 
 	private final static int IMAGE_ROW_LENGTH = 7;
 	private boolean isIgnited;
 
+	
 	//Dynamite Type
 	private int frame_x = 0;
 	private int frame_y = 0;
@@ -39,7 +41,10 @@ public class Dynamite extends GameObject{
 	}
 	
 	public void animate(){
-    	timer--;
+		if(timer > 0 ){
+			timer--;
+		}
+    	
     	//Done Falling
     	if(timer == 0){
     		isFalling = false;
@@ -61,7 +66,16 @@ public class Dynamite extends GameObject{
 		}
 		return false;
 	}
-	
+	public void startFalling(){
+		if(!isFalling){
+			frame_x = 0;
+			isFalling = true;
+		}	
+		timer = ACTION_TIME;
+	}
+	public boolean isFalling(){
+		return isFalling;
+	}
 	private void setNextFrame() {
 		if(current_frame_delay_counter == 0){
 			if(frame_x < IMAGE_ROW_LENGTH){
@@ -103,5 +117,9 @@ public class Dynamite extends GameObject{
 	
 	public int getItemNumber() {
 		return dynamite_number;
+	}
+	
+	public int[] getOffset(int tile_size_x, int tile_size_y){
+		return new int[]{0, offset_y};
 	}
 }
