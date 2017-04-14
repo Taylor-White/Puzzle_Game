@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 
 
 
@@ -9,6 +11,8 @@ public class GameProcessing{
 	private int player_y = 0;
 	private Player player;
 	private boolean input_blocked = false;
+	
+	private ArrayList<Movable_Object> movable_objects = new ArrayList<Movable_Object>();
 	
 	//Item List
 	private int[] items;
@@ -70,6 +74,7 @@ public class GameProcessing{
 					e.printStackTrace();
 				}
 			}
+			movable_objects.clear();
 			this.current_level = level_builder.getCurrentLevel();
 			this.player = level_builder.getCurPlayer();
 			this.player_x = level_builder.getCurPlayerX();
