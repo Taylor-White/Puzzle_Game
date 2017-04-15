@@ -1,5 +1,3 @@
-import java.awt.List;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 
@@ -34,16 +32,12 @@ public class GridCell {
 			if(list.get(i) == obj){
 				ob = list.get(i);
 				list.remove(i);
-				if(list.isEmpty()){
-					//list.add(new GameObject(0, null, true, null, false));//new GameObject(0, x, y, null, true, EnumConsts.Object_Name.Empty)
-				}
 				return ob;
 			}
 		}
 		return ob;
 	}
 	public GameObject getGameObject() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	public ArrayList<GameObject> getList() {

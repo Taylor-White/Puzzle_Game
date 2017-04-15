@@ -162,14 +162,9 @@ public class GameObjectsGrid {
 	
 	public void remove(int tmp_x, int tmp_y, GameObject obj) {
 		ArrayList<GameObject> list = gameObjectGrid[tmp_x][tmp_y].getList();
-		System.out.println("In remove in gameobjectgrid");
-		System.out.println("OBJ: " + obj);
 		for(int i=0; i<list.size(); i++){
-			System.out.println(list.get(i).toString());
 			if(list.get(i) == obj){
-				System.out.println("made it here" + list.get(i).getName());
 				list.remove(i);
-				
 			}
 		}
 		return;	

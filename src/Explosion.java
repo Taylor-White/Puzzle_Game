@@ -36,8 +36,6 @@ public class Explosion extends GameObject{
 	}
 	
 	public BufferedImage getCurrentImage(){
-		//System.out.println("GETS THE CHILD");
-		System.out.println(frame_x + " " + frame_y);
 		return image_frames.getSubimage(frame_x * TILE_SIZE, frame_y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	}
 	

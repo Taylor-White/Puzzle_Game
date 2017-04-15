@@ -145,8 +145,9 @@ public class GameProcessing{
 		}
 	}
 	private void build_dynamite_v(Movable_Object obj, int x, int y, int i) {
-		//Middle sprite
+		//FIX BUT WITH GOING OUT OF BOUNDS
 		
+		//Middle sprite
 		Movable_Object mv = new Movable_Object(x, y, new Explosion(2, imgList.getExplosion()));
 		current_level.add(x, y, mv.getObj());
 		active_objects.add(mv);
@@ -157,28 +158,25 @@ public class GameProcessing{
 		current_level.add(x, y, mv.getObj());
 		active_objects.add(mv);
 		
-		//vertical sprite up one
+		//vertical sprite up two
 		y = y-1;
 		mv = new Movable_Object(x, y, new Explosion(0, imgList.getExplosion()));
 		current_level.add(x, y, mv.getObj());
 		active_objects.add(mv);
 		
-		//vertical sprite up one
+		//vertical sprite down one
 		y = y+3;
 		mv = new Movable_Object(x, y, new Explosion(3, imgList.getExplosion()));
 		current_level.add(x, y, mv.getObj());
 		
 		active_objects.add(mv);
 		
-		//vertical sprite up one
+		//vertical sprite down two
 		y = y+1;
 		mv = new Movable_Object(x, y, new Explosion(4, imgList.getExplosion()));
 		current_level.add(x, y, mv.getObj());
 		active_objects.add(mv);
-		
-		
-		current_level.printGrid();
-	}
+		}
 	private void checkItemsFalling() {
 		for(int i=0; i<active_objects.size(); i++){
 			Movable_Object obj = active_objects.get(i);
