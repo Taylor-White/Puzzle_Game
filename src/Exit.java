@@ -13,7 +13,7 @@ public class Exit extends GameObject {
 	private boolean isOpen = false;
 	
 	public Exit(BufferedImage imgList){
-		super(imgList, false, true, false, false, EnumConsts.Object_Name.Coin);
+		super(imgList, false, true, false, false, false, EnumConsts.Object_Name.Coin);
 		animation_lengths = new int[3];
 		animation_lengths[0] = 0;
 		animation_lengths[1] = 7;

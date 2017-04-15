@@ -14,14 +14,16 @@ public abstract class GameObject {
 	boolean isBreakable;
 	boolean isTraversable;
 	boolean isItem;
+	boolean isDeath;
 	
-	public GameObject(BufferedImage imgList, boolean isGround, boolean isTraversable, boolean isBreakable, boolean isItem, EnumConsts.Object_Name n){
+	public GameObject(BufferedImage imgList, boolean isGround, boolean isTraversable, boolean isBreakable, boolean isItem, boolean isDeath, EnumConsts.Object_Name n){
 		this.name = n;
 		this.image_frames = imgList;
 		this.isGround = isGround;
 		this.isBreakable = isBreakable;
 		this.isTraversable = isTraversable;
 		this.isItem = isItem;
+		this.isDeath = isDeath;
 		return;
 	}
 	
@@ -82,6 +84,15 @@ public abstract class GameObject {
 	
 	public void startFalling(){
 		
+	}
+
+	public boolean isDeath() {
+		return isDeath;
+	}
+
+	public int getType() {
+		// TODO Auto-generated method stub
+		return -1;
 	}
 
 }

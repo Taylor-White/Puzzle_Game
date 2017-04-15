@@ -11,7 +11,7 @@ public class Coin extends GameObject {
 	private final static int TIME_TO_IDLE_ANIMATION = 12;
 	
 	public Coin(BufferedImage imgList){
-		super(imgList, false, true, true, false, EnumConsts.Object_Name.Coin);
+		super(imgList, false, true, true, false, false, EnumConsts.Object_Name.Coin);
 		animation_lengths = new int[2];
 		animation_lengths[0] = 6;
 		animation_lengths[1] = 3;

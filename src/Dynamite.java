@@ -32,12 +32,11 @@ public class Dynamite extends GameObject{
 	
 
 	public Dynamite(BufferedImage imgList, int style, boolean ignited){
-		super(imgList, false, true, true, true, EnumConsts.Object_Name.Dynamite);
+		super(imgList, false, true, true, true, false, EnumConsts.Object_Name.Dynamite);
 		this.frame_y = style;
 		dynamite_number = style;
 		isIgnited = ignited;
 		time_until_detonate = DETONATION_TIME;
-
 	}
 	
 	public void animate(){
@@ -55,6 +54,7 @@ public class Dynamite extends GameObject{
 		if(isIgnited){
 				setNextFrame();
 				time_until_detonate--;
+				//System.out.println("time until detonate: " + time_until_detonate);
 		}
 		return;
 	}

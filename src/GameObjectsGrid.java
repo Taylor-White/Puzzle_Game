@@ -158,9 +158,23 @@ public class GameObjectsGrid {
 			}
 		}
 		return;		
-		
 	}
-
+	
+	public void remove(int tmp_x, int tmp_y, GameObject obj) {
+		ArrayList<GameObject> list = gameObjectGrid[tmp_x][tmp_y].getList();
+		System.out.println("In remove in gameobjectgrid");
+		System.out.println("OBJ: " + obj);
+		for(int i=0; i<list.size(); i++){
+			System.out.println(list.get(i).toString());
+			if(list.get(i) == obj){
+				System.out.println("made it here" + list.get(i).getName());
+				list.remove(i);
+				
+			}
+		}
+		return;	
+	}
+	
 	public void increment_animations() {
 		//System.out.println("Printing Grid...");
 		for(int i=0; i<gameObjectGrid.length; i++){
@@ -205,6 +219,22 @@ public class GameObjectsGrid {
 	public void add(int x, int y, GameObject obj) {
 		gameObjectGrid[x][y].add(obj);
 	}
+
+
+	public boolean isDeath(int x, int y) {
+		if(gameObjectGrid[x][y] == null){return false;}
+		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
+		
+		for(int i=0; i<list.size(); i++){
+			//System.out.println(list.get(i).toString());
+			if(list.get(i).isDeath()){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 
 
 

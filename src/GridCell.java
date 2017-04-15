@@ -18,12 +18,6 @@ public class GridCell {
 		this.y_coordinate = y;
 	}
 	
-	/*
-	public GridCell(int j, int x, int y, BufferedImage[] img_set, boolean isTraversable, EnumConsts.Object_Name n, boolean isBreakable) {
-		this.list.add(new GameObject(j,img_set, isTraversable, n, isBreakable));
-		this.x_coordinate = x;
-		this.y_coordinate = y;
-	}*/
 	public void add(GameObject go){
 		list.add(go);
 	}
@@ -38,7 +32,6 @@ public class GridCell {
 		GameObject ob = null;
 		for(int i=0; i<list.size(); i++){
 			if(list.get(i) == obj){
-				System.out.println("Found Player");
 				ob = list.get(i);
 				list.remove(i);
 				if(list.isEmpty()){

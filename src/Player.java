@@ -21,7 +21,7 @@ public class Player extends GameObject {
 	private int current_frame_delay_counter = FRAME_DELAY;
 	
 	public Player(BufferedImage imgList){
-		super(imgList, false, true, true, false, EnumConsts.Object_Name.Player);
+		super(imgList, false, true, true, false, false, EnumConsts.Object_Name.Player);
 		animation_lengths = new int[15];
 		animation_lengths[0] = 0;
 		animation_lengths[1] = 0;

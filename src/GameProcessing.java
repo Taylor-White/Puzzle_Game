@@ -14,7 +14,7 @@ public class GameProcessing{
 	private boolean input_blocked = false;
 	EnumConsts.Player_Action next_action = null;
 	
-	private ArrayList<Movable_Object> movable_objects = new ArrayList<Movable_Object>();
+	private ArrayList<Movable_Object> active_objects = new ArrayList<Movable_Object>();
 	
 	//Item List
 	private int[] items;
@@ -76,7 +76,7 @@ public class GameProcessing{
 					e.printStackTrace();
 				}
 			}
-			movable_objects.clear();
+			active_objects.clear();
 			//Need a function for setting these
 			this.current_level = level_builder.getCurrentLevel();
 			this.player = level_builder.getCurPlayer();
@@ -103,7 +103,8 @@ public class GameProcessing{
 				checkPlayerCollisions(); 
 				checkPlayerFalling();
 				checkItemsFalling();
-				
+				//checkItemsExploding();
+				checkRemovingObjects();
 				checkPlayerCollisions();
 				
 				//checkPlayerDeath();
@@ -123,9 +124,64 @@ public class GameProcessing{
 	}
 	
 
+	private void checkRemovingObjects() {
+		for(int i=0; i<active_objects.size(); i++){
+			Movable_Object obj = active_objects.get(i);
+			if(obj.getObj().getName() == EnumConsts.Object_Name.Dynamite && obj.getObj().destroy()){
+				if(obj.getObj().getType() == 0){
+					int tmp_x = obj.getX();
+					int tmp_y = obj.getY();
+					current_level.remove(tmp_x, tmp_y, obj.getObj());
+					active_objects.remove(i);
+					build_dynamite_v(obj, obj.getX(), obj.getY(), i);
+
+				}
+			}else if(obj.getObj().getName() == EnumConsts.Object_Name.Explosion && obj.getObj().destroy()){
+				int tmp_x = obj.getX();
+				int tmp_y = obj.getY();
+				current_level.remove(tmp_x, tmp_y, obj.getObj());
+				active_objects.remove(i);
+			}
+		}
+	}
+	private void build_dynamite_v(Movable_Object obj, int x, int y, int i) {
+		//Middle sprite
+		
+		Movable_Object mv = new Movable_Object(x, y, new Explosion(2, imgList.getExplosion()));
+		current_level.add(x, y, mv.getObj());
+		active_objects.add(mv);
+		
+		//vertical sprite up one
+		y = y-1;		
+		mv = new Movable_Object(x, y, new Explosion(1, imgList.getExplosion()));
+		current_level.add(x, y, mv.getObj());
+		active_objects.add(mv);
+		
+		//vertical sprite up one
+		y = y-1;
+		mv = new Movable_Object(x, y, new Explosion(0, imgList.getExplosion()));
+		current_level.add(x, y, mv.getObj());
+		active_objects.add(mv);
+		
+		//vertical sprite up one
+		y = y+3;
+		mv = new Movable_Object(x, y, new Explosion(3, imgList.getExplosion()));
+		current_level.add(x, y, mv.getObj());
+		
+		active_objects.add(mv);
+		
+		//vertical sprite up one
+		y = y+1;
+		mv = new Movable_Object(x, y, new Explosion(4, imgList.getExplosion()));
+		current_level.add(x, y, mv.getObj());
+		active_objects.add(mv);
+		
+		
+		current_level.printGrid();
+	}
 	private void checkItemsFalling() {
-		for(int i=0; i<movable_objects.size(); i++){
-			Movable_Object obj = movable_objects.get(i);
+		for(int i=0; i<active_objects.size(); i++){
+			Movable_Object obj = active_objects.get(i);
 			int obj_x = obj.getX();
 			int obj_y = obj.getY();
 			if(!obj.getObj().isFalling() && shouldFall(obj_x, obj_y)){
@@ -162,8 +218,8 @@ public class GameProcessing{
 	}
 	private void adjust_positions() {
 		//for(objects in grid that can move)
-		for(int i=0; i<movable_objects.size(); i++){
-			GameObject obj = movable_objects.get(i).getObj();
+		for(int i=0; i<active_objects.size(); i++){
+			GameObject obj = active_objects.get(i).getObj();
 			if(obj.halfWayThere()){
 				System.out.println("THIS IS REACHED");
 				move_object_in_grid(obj, null);
@@ -202,8 +258,8 @@ public class GameProcessing{
 		}else if(obj.getName() == EnumConsts.Object_Name.Dynamite){
 			int tmp_x = -1;
 			int tmp_y = -1;
-			for(int i=0; i<movable_objects.size(); i++){
-				Movable_Object m_obj = movable_objects.get(i);
+			for(int i=0; i<active_objects.size(); i++){
+				Movable_Object m_obj = active_objects.get(i);
 				if(obj == m_obj.getObj()){
 					tmp_x = m_obj.getX();
 					tmp_y = m_obj.getY();
@@ -220,7 +276,7 @@ public class GameProcessing{
 		
 	}
 	private void checkPlayerDeath() {
-		if(!current_level.isTraversable(player_x, player_y)){
+		if(current_level.isDeath(player_x, player_y)){
 			//PlayerDeath!!!
 			System.out.println("Player Dead");
 			this.restart = true;
@@ -288,7 +344,7 @@ public class GameProcessing{
 				if(current_level.isTraversable(player_x-1, player_y)){
 					current_level.add(player_x-1, player_y, d);
 					Movable_Object mv = new Movable_Object(player_x-1, player_y, d);
-					movable_objects.add(mv);
+					active_objects.add(mv);
 					already_dropped = true;
 				}else{
 					already_dropped = false;
@@ -297,7 +353,7 @@ public class GameProcessing{
 				if(current_level.isTraversable(player_x+1, player_y)){
 					current_level.add(player_x+1, player_y, d);
 					Movable_Object mv = new Movable_Object(player_x+1, player_y, d);
-					movable_objects.add(mv);
+					active_objects.add(mv);
 					already_dropped = true;
 				}else{
 					already_dropped = false;
@@ -306,7 +362,7 @@ public class GameProcessing{
 			if(!already_dropped){
 				current_level.add(player_x, player_y, d);
 				Movable_Object mv = new Movable_Object(player_x, player_y, d);
-				movable_objects.add(mv);
+				active_objects.add(mv);
 			}
 			
 			

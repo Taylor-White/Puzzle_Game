@@ -16,6 +16,7 @@ public class ImageList {
 	private static BufferedImage ladder;
 	private static BufferedImage exit;
 	private static BufferedImage dynamite;
+	private static BufferedImage explosion;
 	
 	public ImageList(){
 		
@@ -30,6 +31,7 @@ public class ImageList {
 		BufferedImage ladder_img = null;
 		BufferedImage exit_img = null;
 		BufferedImage dynamite_img = null;
+		BufferedImage explosion_img = null;
 
 		
 		//Initialize Block Image
@@ -89,13 +91,20 @@ public class ImageList {
 		ImageList.dynamite = dynamite_img;
 		
 		//Initialize Exit Image
-				try {
-					exit_img = ImageIO.read(new File("./resources/sprites/exit.png"));
-			      } catch(IOException e) {
-			         System.out.println("Error: " + e);
-			      }
-				ImageList.exit = exit_img;
+			try {
+				exit_img = ImageIO.read(new File("./resources/sprites/exit.png"));
+		      } catch(IOException e) {
+		         System.out.println("Error: " + e);
+		      }
+			ImageList.exit = exit_img;
 				
+		//Initialize Explosion Image
+		try {
+			explosion_img = ImageIO.read(new File("./resources/sprites/explosions.png"));
+	      } catch(IOException e) {
+	         System.out.println("Error: " + e);
+	      }
+		ImageList.explosion = explosion_img;		
 		return;
 	}
 	
@@ -121,6 +130,10 @@ public class ImageList {
 	
 	public BufferedImage getDynamite() {
 		return dynamite;
+	}
+	
+	public BufferedImage getExplosion() {
+		return explosion;
 	}
 
 	public BufferedImage getExit() {
