@@ -10,16 +10,16 @@ The project is currently under construction.
 
 Controls:
 
-w -> move left
-r -> move right
-e -> climb up
-d -> climb down
-s -> dig left
-f -> dig right
-u -> drop first item
-i -> drop second item
-o -> drop third item
-p -> drop fourth item
+* w -> move left
+* r -> move right
+* e -> climb up
+* d -> climb down
+* s -> dig left
+* f -> dig right
+* u -> drop first item
+* i -> drop second item
+* o -> drop third item
+* p -> drop fourth item
 
 Goal:
 
