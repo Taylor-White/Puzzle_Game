@@ -65,13 +65,6 @@ public class GameView extends JPanel{
 		   //Set up JPanel
 		   this.setSize(getViewSizeX(), getViewSizeY());
 		   this.setOpaque(true);
-		   		   
-	       //Load Graphics
-	       try {                
-	           image_block = ImageIO.read(new File("./resources/sprites/block.png"));
-	        } catch (IOException ex) {
-	             System.out.println("Exception: " + ex);
-	        }
 	       
 	       //Set Key Bindings
 	       inputMap = this.getInputMap();
@@ -135,8 +128,11 @@ public class GameView extends JPanel{
 	            	if(go.getDefaultImage() != null){
 	            		int[] offset = go.getOffset(tile_size_x, tile_size_y);
 	        		//System.out.println("gride_cell.getAt" + i + "): " + go.getDefaultImage().toString());
-	            	g.drawImage(go.getCurrentImage(), tile_size_x*grid_cell.getX() + offset[0], tile_size_y*grid_cell.getY() + offset[1], null);
-	
+	            	try{
+	            		g.drawImage(go.getCurrentImage(), tile_size_x*grid_cell.getX() + offset[0], tile_size_y*grid_cell.getY() + offset[1], null);
+	            	}catch(Exception e){
+	            		System.out.println(e);
+	            	}
 	            	}else{
 	            		//System.out.println("null at: " + go.getX());
 	            	}
@@ -202,8 +198,8 @@ public class GameView extends JPanel{
 		number_left_3.setFont (number_left_3.getFont ().deriveFont (16.0f));
 		number_left_4.setFont (number_left_4.getFont ().deriveFont (16.0f));
 		
-		ImageIcon explosive_h = new ImageIcon("./resources/sprites/inventory/explosive_h.png");
-		ImageIcon explosive_v = new ImageIcon("./resources/sprites/inventory/explosive_v.png");
+		ImageIcon explosive_h = new ImageIcon("./resources/sprites/inventory/explosive_v.png");
+		ImageIcon explosive_v = new ImageIcon("./resources/sprites/inventory/explosive_h.png");
 		ImageIcon explosive_o = new ImageIcon("./resources/sprites/inventory/explosive_o.png");
 		ImageIcon explosive_c = new ImageIcon("./resources/sprites/inventory/explosive_c.png");
 		

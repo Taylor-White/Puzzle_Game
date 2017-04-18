@@ -10,7 +10,7 @@ public class Explosion extends GameObject{
 	private int current_frame_delay_counter = FRAME_DELAY;
 	
 	public Explosion(int style, BufferedImage imgList){
-		super(imgList, false, true, true, false, false, EnumConsts.Object_Name.Explosion);
+		super(imgList, false, true, true, false, true, EnumConsts.Object_Name.Explosion);
 		animation_length = 3;
 		frame_y = style;
 	}

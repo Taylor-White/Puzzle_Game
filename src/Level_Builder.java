@@ -2,6 +2,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -12,13 +13,13 @@ public class Level_Builder implements Runnable {
 	private int cur_player_x;
 	private int cur_player_y;
 	private int cur_coin_count;
-	private ArrayList<GameObject> current_level_moving_objects = new ArrayList<GameObject>();
+	private List<GameObject> current_level_moving_objects = new ArrayList<GameObject>();
 	private GameObjectsGrid next_level;
 	private Player next_player;
 	private int next_player_x;
 	private int next_player_y;
 	private int nxt_coin_count;
-	private ArrayList<GameObject> next_level_moving_objects = new ArrayList<GameObject>();
+	private List<GameObject> next_level_moving_objects = new ArrayList<GameObject>();
 	private final int tiles_in_row;
 	private final int tiles_in_col;
 	private int level_number;
@@ -180,7 +181,7 @@ public class Level_Builder implements Runnable {
 	}
 			
 	//Gets GameObject[][] from a level number
-	public GameObjectsGrid getLevel(int level, boolean isCurr){
+	public synchronized GameObjectsGrid getLevel(int level, boolean isCurr){
 		String from_file = getStringFromFile(level);
 		GameObjectsGrid level_array = parseLevel(from_file, isCurr);
 		System.out.println("IN LEVEL BUILDER");

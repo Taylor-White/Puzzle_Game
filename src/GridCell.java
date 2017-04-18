@@ -1,8 +1,9 @@
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class GridCell {
-	private ArrayList<GameObject> list = new ArrayList<GameObject>();
+	private List<GameObject> list = new ArrayList<GameObject>();
 	private int i;
 	private int x_coordinate;
 	private int y_coordinate;
@@ -40,7 +41,7 @@ public class GridCell {
 	public GameObject getGameObject() {
 		return null;
 	}
-	public ArrayList<GameObject> getList() {
+	public List<GameObject> getList() {
 		return list;
 	}
 	public int size() {

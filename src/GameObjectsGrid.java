@@ -1,5 +1,6 @@
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -30,8 +31,8 @@ public class GameObjectsGrid {
 	public GridCell[][] getGameObjectGrid(){
 		return gameObjectGrid;
 	}
-	public ArrayList<GameObject> getObjectList(){
-		ArrayList<GameObject> list = new ArrayList<GameObject>();
+	public List<GameObject> getObjectList(){
+		List<GameObject> list = new ArrayList<GameObject>();
 		for(int i=0; i<gameObjectGrid.length; i++){
 			for(int k=0; k<gameObjectGrid[i].length; k++){	
 				list = gameObjectGrid[i][k].getList();
@@ -62,7 +63,7 @@ public class GameObjectsGrid {
 
 	public boolean isGround(int x, int y) {
 		if(gameObjectGrid[x][y] == null){return false;}
-		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
+		List<GameObject> list = gameObjectGrid[x][y].getList();
 		
 		for(int i=0; i<list.size(); i++){
 			//System.out.println(list.get(i).toString());
@@ -74,7 +75,7 @@ public class GameObjectsGrid {
 	}
 	public GameObject isItem(int x, int y) {
 		if(gameObjectGrid[x][y] == null){return null;}
-		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
+		List<GameObject> list = gameObjectGrid[x][y].getList();
 		
 		for(int i=0; i<list.size(); i++){
 			//System.out.println(list.get(i).toString());
@@ -86,7 +87,7 @@ public class GameObjectsGrid {
 	}
 	public boolean isTraversable(int x, int y) {
 		if(gameObjectGrid[x][y] == null){return false;}
-		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
+		List<GameObject> list = gameObjectGrid[x][y].getList();
 		
 		for(int i=0; i<list.size(); i++){
 			//System.out.println(list.get(i).toString());
@@ -99,10 +100,7 @@ public class GameObjectsGrid {
 
 	public boolean isBreakable(int x, int y) {
 		if(gameObjectGrid[x][y] == null){return false;}
-		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
-		System.out.println("Trying to break block at: ");
-		System.out.println("X: " + x);
-		System.out.println("Y: " + y);
+		List<GameObject> list = gameObjectGrid[x][y].getList();
 
 		for(int i=0; i<list.size(); i++){
 			//System.out.println(list.get(i).toString());
@@ -128,7 +126,7 @@ public class GameObjectsGrid {
 		for(int i=0; i<gameObjectGrid.length; i++){
 			for(int j=0; j<gameObjectGrid[i].length; j++){
 				if(gameObjectGrid[i][j] != null){
-					ArrayList<GameObject> list = gameObjectGrid[i][j].getList();
+					List<GameObject> list = gameObjectGrid[i][j].getList();
 					//if(list != null){
 						System.out.println("Tile: " + i + " " + j);
 						for(int k=0; k<list.size(); k++){
@@ -147,7 +145,7 @@ public class GameObjectsGrid {
 	}
 
 	public void destroy(int x, int y, EnumConsts.Object_Name object) {
-		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
+		List<GameObject> list = gameObjectGrid[x][y].getList();
 		
 		for(int i=0; i<list.size(); i++){
 			//System.out.println(list.get(i).toString());
@@ -161,7 +159,7 @@ public class GameObjectsGrid {
 	}
 	
 	public void remove(int tmp_x, int tmp_y, GameObject obj) {
-		ArrayList<GameObject> list = gameObjectGrid[tmp_x][tmp_y].getList();
+		List<GameObject> list = gameObjectGrid[tmp_x][tmp_y].getList();
 		for(int i=0; i<list.size(); i++){
 			if(list.get(i) == obj){
 				list.remove(i);
@@ -175,7 +173,7 @@ public class GameObjectsGrid {
 		for(int i=0; i<gameObjectGrid.length; i++){
 			for(int j=0; j<gameObjectGrid[i].length; j++){
 				if(gameObjectGrid[i][j] != null){
-					ArrayList<GameObject> list = gameObjectGrid[i][j].getList();
+					List<GameObject> list = gameObjectGrid[i][j].getList();
 					//if(list != null){
 						//System.out.println("Tile: " + i + " " + j);
 						for(int k=0; k<list.size(); k++){
@@ -190,22 +188,33 @@ public class GameObjectsGrid {
 		
 	}
 
-	public void checkPlayerCollisions(int x, int y) {
+	public void checkCollision(GameObject obj_1, int x, int y) {
 		if(gameObjectGrid[x][y] == null){return;}
-		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
-
+		List<GameObject> list = gameObjectGrid[x][y].getList();
+		boolean isBreakable = isBreakable(x,y);
 		for(int i=0; i<list.size(); i++){
-			GameObject obj = list.get(i);
-			if(obj.getName() == EnumConsts.Object_Name.Coin){
-				boolean isRemove = list.get(i).destroy();
-				if(isRemove){
-					list.remove(i);
+			GameObject obj_2 = list.get(i);
+			if(obj_1.getName() == EnumConsts.Object_Name.Player){
+				if(obj_2.getName() == EnumConsts.Object_Name.Coin){
+					boolean isRemove = list.get(i).destroy();
+					if(isRemove){
+						list.remove(i);
+					}
+				}else if(obj_2.getName() == EnumConsts.Object_Name.Dynamite  && obj_2.isItem()){
+					boolean isRemove = list.get(i).destroy();
+					if(isRemove){
+						list.remove(i);
+					}
 				}
-			}else if(obj.getName() == EnumConsts.Object_Name.Dynamite  && obj.isItem()){
-				boolean isRemove = list.get(i).destroy();
-				if(isRemove){
-					list.remove(i);
+			}else if(obj_1.getName() == EnumConsts.Object_Name.Explosion && isBreakable){
+				
+				if(obj_2.getName() == EnumConsts.Object_Name.Block){
+					boolean isRemove = list.get(i).destroy();
+					if(isRemove){
+						//list.remove(i);
+					}
 				}
+				
 			}
 		}
 		return;
@@ -218,7 +227,7 @@ public class GameObjectsGrid {
 
 	public boolean isDeath(int x, int y) {
 		if(gameObjectGrid[x][y] == null){return false;}
-		ArrayList<GameObject> list = gameObjectGrid[x][y].getList();
+		List<GameObject> list = gameObjectGrid[x][y].getList();
 		
 		for(int i=0; i<list.size(); i++){
 			//System.out.println(list.get(i).toString());
