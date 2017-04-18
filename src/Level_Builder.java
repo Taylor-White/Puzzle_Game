@@ -84,7 +84,7 @@ public class Level_Builder implements Runnable {
 	
 	//Convert File Data to GameObject 2D Array
 	private GameObjectsGrid parseLevel(String from_file, boolean isCurr) {
-		GameObjectsGrid level_object = new GameObjectsGrid();
+		GameObjectsGrid level_object = new GameObjectsGrid(tiles_in_row, tiles_in_col);
 		System.out.println("from_file string: \n" + from_file);
 		String[] parts = from_file.split("\n");
 		GridCell[][] level_array = new GridCell[tiles_in_row][tiles_in_col];

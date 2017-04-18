@@ -12,8 +12,8 @@ public class GameObjectsGrid {
 
 	private GridCell[][] gameObjectGrid;
 	
-	private int tiles_in_row = 32;
-	private int tiles_in_col = 24;
+	private int tiles_in_row;
+	private int tiles_in_col;
 	private int current_x = 0;
 	private int current_y = 0;
 	
@@ -23,6 +23,12 @@ public class GameObjectsGrid {
 	
 
 	
+	public GameObjectsGrid(int x_tiles, int y_tiles) {
+		this.tiles_in_row = x_tiles;
+		this.tiles_in_col = y_tiles;
+	}
+
+
 	public void setGameObjectGrid(GridCell[][] gridCells) {
 		this.gameObjectGrid = gridCells;
 	}
@@ -112,7 +118,6 @@ public class GameObjectsGrid {
 	}
 	
 	public void moveObjectTo(GameObject obj, int from_x, int from_y, int to_x, int to_y) {
-		//System.out.println("Remove player from...");
 		gameObjectGrid[from_x][from_y].remove(obj);
 		gameObjectGrid[to_x][to_y].add(obj);
 		//ADD PLAYER_X AND PLAYER_Y CHANGES TO THIS

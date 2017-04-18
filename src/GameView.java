@@ -31,8 +31,8 @@ public class GameView extends JPanel{
 	
 	
 	//Canvas Constants
-	private final int tile_size_x = 32;
-	private final int tile_size_y = 32;
+	private final int PIXELS_IN_TILE_X = 32;
+	private final int PIXELS_IN_TILE_Y = 32;
 	private final int tiles_in_row;
 	private final int tiles_in_col;
 	
@@ -126,10 +126,10 @@ public class GameView extends JPanel{
         		GameObject go = grid_cell.getAt(i);
         		if(go != null){
 	            	if(go.getDefaultImage() != null){
-	            		int[] offset = go.getOffset(tile_size_x, tile_size_y);
+	            		int[] offset = go.getOffset(PIXELS_IN_TILE_X, PIXELS_IN_TILE_Y);
 	        		//System.out.println("gride_cell.getAt" + i + "): " + go.getDefaultImage().toString());
 	            	try{
-	            		g.drawImage(go.getCurrentImage(), tile_size_x*grid_cell.getX() + offset[0], tile_size_y*grid_cell.getY() + offset[1], null);
+	            		g.drawImage(go.getCurrentImage(), PIXELS_IN_TILE_X*grid_cell.getX() + offset[0], PIXELS_IN_TILE_Y*grid_cell.getY() + offset[1], null);
 	            	}catch(Exception e){
 	            		System.out.println(e);
 	            	}
@@ -144,8 +144,6 @@ public class GameView extends JPanel{
         	grid_cell = gameObjectsGrid.getNext();
         }
         gameObjectsGrid.reset();
-        
-        
     }
     
 	@Override
@@ -153,14 +151,14 @@ public class GameView extends JPanel{
         if (isPreferredSizeSet()) {
             return super.getPreferredSize();
         }
-        return new Dimension(tile_size_y * tiles_in_col, tile_size_x * tiles_in_row);
+        return new Dimension(PIXELS_IN_TILE_Y * tiles_in_col, PIXELS_IN_TILE_X * tiles_in_row);
     }
 
 	public int getViewSizeX() {
-		return tiles_in_row * tile_size_x;
+		return tiles_in_row * PIXELS_IN_TILE_X;
 	}
 	public int getViewSizeY() {
-		return tiles_in_col * tile_size_y;
+		return tiles_in_col * PIXELS_IN_TILE_Y;
 	}
 	public KeyActionManager getActionManager() {
 		System.out.println("GameView's view of keyactionmanager: " + keyActionManager.getList().toString());

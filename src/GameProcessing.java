@@ -56,7 +56,7 @@ public class GameProcessing{
 		level_int = 1;
 		
 		//Blank Level
-		this.current_level = new GameObjectsGrid();
+		this.current_level = new GameObjectsGrid(x_tiles, y_tiles);
 		
 		//Build Level
 		level_builder = new Level_Builder(x_tiles, y_tiles, imgList);
