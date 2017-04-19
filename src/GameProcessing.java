@@ -36,10 +36,10 @@ public class GameProcessing{
 	private int level_int = 1;
 	private boolean restart = false;
 
-	public GameProcessing(int x_tiles, int y_tiles, GameView gv){
+	public GameProcessing(int tiles_in_row, int tiles_in_col, GameView gv){
 		//Setup Variables
-		this.tiles_in_row = x_tiles;
-		this.tiles_in_col = y_tiles;
+		this.tiles_in_row = tiles_in_row;
+		this.tiles_in_col = tiles_in_col;
 		
 		//Set Game View
 		this.gameView = gv;
@@ -56,10 +56,10 @@ public class GameProcessing{
 		level_int = 1;
 		
 		//Blank Level
-		this.current_level = new GameObjectsGrid(x_tiles, y_tiles);
+		this.current_level = new GameObjectsGrid(tiles_in_row, tiles_in_col);
 		
 		//Build Level
-		level_builder = new Level_Builder(x_tiles, y_tiles, imgList);
+		level_builder = new Level_Builder(tiles_in_row, tiles_in_col, imgList);
 		
 		//Set Inventory to Empty
 		items = new int[]{0,0,0,0};

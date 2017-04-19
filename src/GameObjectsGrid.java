@@ -23,9 +23,11 @@ public class GameObjectsGrid {
 	
 
 	
-	public GameObjectsGrid(int x_tiles, int y_tiles) {
-		this.tiles_in_row = x_tiles;
-		this.tiles_in_col = y_tiles;
+	public GameObjectsGrid(int tiles_in_row, int tiles_in_col) {
+		System.out.println("tiles_in_row: " + tiles_in_row);
+		System.out.println("tiles_in_col: " + tiles_in_col);
+		this.tiles_in_row = tiles_in_row;
+		this.tiles_in_col = tiles_in_col;
 	}
 
 
@@ -50,11 +52,17 @@ public class GameObjectsGrid {
 		return gameObjectGrid[x][y];
 	}
 	public GridCell getNext(){
-		GridCell go = gameObjectGrid[current_x][current_y];
+		GridCell go;
+		if(current_x < tiles_in_col && current_y < tiles_in_col){
+			go = gameObjectGrid[current_x][current_y];
+		}else{
+			go = null;
+		}
 		current_x++;
-		if(gameObjectGrid[current_x][current_y] == null){
+		if(current_x == tiles_in_col){
 			current_x = 0;
 			current_y++;
+			
 		}
 		return go;
 	}

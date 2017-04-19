@@ -33,10 +33,10 @@ public class Level_Builder implements Runnable {
 	private ImageList imgList;
 
 		
-	public Level_Builder(int x_tiles, int y_tiles, ImageList il){
+	public Level_Builder(int tiles_in_row, int tiles_in_col, ImageList il){
 		//Setup Variables
-		this.tiles_in_row = x_tiles;
-		this.tiles_in_col = y_tiles;
+		this.tiles_in_row = tiles_in_row;
+		this.tiles_in_col = tiles_in_col;
 		this.imgList = il;
 		this.level_number = 1;
 		cur_player = null;
@@ -84,18 +84,42 @@ public class Level_Builder implements Runnable {
 	
 	//Convert File Data to GameObject 2D Array
 	private GameObjectsGrid parseLevel(String from_file, boolean isCurr) {
+		boolean h_error = false;
+		boolean w_error = false;
+
 		GameObjectsGrid level_object = new GameObjectsGrid(tiles_in_row, tiles_in_col);
 		System.out.println("from_file string: \n" + from_file);
 		String[] parts = from_file.split("\n");
-		GridCell[][] level_array = new GridCell[tiles_in_row][tiles_in_col];
+		GridCell[][] level_array = new GridCell[tiles_in_col][tiles_in_row];
 		int p_x = 0;
 		int p_y = 0;
 		Player p = null;
 		int cc = 0;
-		for(int y=0; y<parts.length; y++){
-			String[] cell = parts[y].split(",");
-			for(int x=0; x<cell.length; x++){
-				String[] depth = cell[x].split(":");
+		System.out.println("tiles_in_row: " + tiles_in_row + " and tiles_in_col: " + tiles_in_col);
+
+		for(int y=0; y<tiles_in_row; y++){ // parts.length //tiles_in_row
+			String[] cell;
+			try{
+				cell = parts[y].split(",");
+			}catch(Exception e){
+				if(!h_error){
+					System.out.println("Warning, undefined tiles in level while parsing (height).");
+					h_error = true;
+				}	
+				cell = new String[]{"_"};
+			}
+			
+			for(int x=0; x<tiles_in_col; x++){ // cell.length //tiles_in_col
+				String[] depth;
+				try{
+					depth = cell[x].split(":");
+				}catch(Exception e){
+					if(!w_error){
+						System.out.println("Warning, undefined tiles in level while parsing (width).");
+						w_error = true;
+					}
+					depth = new String[]{"_"};
+				}
 				GridCell new_cell = new GridCell(x, y);
 				for(int c = 0; c<depth.length; c++){
 					try{
@@ -111,7 +135,6 @@ public class Level_Builder implements Runnable {
 				            break;
 				            case 'i':  
 				            	img_set = imgList.getIndestructible();
-				            	System.out.println("Getting I");
 				            	new_cell.add(new Indestructable(img_set));
 		            		break;
 				            case 'c':
@@ -153,6 +176,7 @@ public class Level_Builder implements Runnable {
 				            	img_set = null;
 				            break;
 				        }
+						System.out.println("x: " + x + " and y: " + y);
 						level_array[x][y] = new_cell;
 					} catch (IllegalArgumentException e){
 						System.out.println("Invalid Format");
@@ -174,7 +198,7 @@ public class Level_Builder implements Runnable {
 			this.nxt_coin_count = cc;
 			next_level = level_object;
 		}
-		
+		System.out.println("Level_array: " + level_array);
 		System.out.println("done parsing level...");
 		return level_object;
 		

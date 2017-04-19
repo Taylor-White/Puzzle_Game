@@ -35,10 +35,6 @@ public class GameView extends JPanel{
 	private final int PIXELS_IN_TILE_Y = 32;
 	private final int tiles_in_row;
 	private final int tiles_in_col;
-	
-	//Game Graphics
-	private BufferedImage image_block;
-	private BufferedImage bi;
 
 	//Build Game Objects Container
 	private GameObjectsGrid gameObjectsGrid;
@@ -50,10 +46,10 @@ public class GameView extends JPanel{
 		InputMap inputMap;
 	    ActionMap actionMap;
 	
-	public GameView(int tiles_x, int tiles_y){
+	public GameView(int tiles_in_row, int tiles_in_col){
 			//Set Default Values
-			this.tiles_in_row = tiles_x;
-			this.tiles_in_col = tiles_y;
+			this.tiles_in_row = tiles_in_row;
+			this.tiles_in_col = tiles_in_col;
 		
 			//Set item labels
 			item_label = new ArrayList<JLabel>();
@@ -104,11 +100,7 @@ public class GameView extends JPanel{
 	}   
 	public void drawing(GameObjectsGrid gog){
 		this.gameObjectsGrid = gog;
-	      try {
-	    	  image_block = ImageIO.read(new File("./resources/sprites/block.png"));
-	      } catch(IOException e) {
-	         System.out.println("failed");
-	      }
+
 	      repaint();
 	   }
 

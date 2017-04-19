@@ -15,7 +15,6 @@ public class KeyActionManager {
 		Action action = new Action(a);
 		keylist.add(action);
 		System.out.println("Adding action: " + action.toString());
-		System.out.println("Adding action to list: " + keylist.toString());
 		return action;
 	}
 	public Action getAt(int i){
