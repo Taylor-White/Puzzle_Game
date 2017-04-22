@@ -16,8 +16,7 @@ public class Coin extends GameObject {
 		animation_lengths[0] = 6;
 		animation_lengths[1] = 3;
 	}
-	//coin.getSubimage(xGrid * TILE_SIZE, yGrid * TILE_SIZE, TILE_SIZE, TILE_SIZE);
-	
+
 	public void animate(){
 		if(idle_timer < TIME_TO_IDLE_ANIMATION){
 			idle_timer++;

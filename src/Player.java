@@ -309,7 +309,6 @@ public class Player extends GameObject {
 	//Fix for finishing climbing up ladders
 	public void stand() {
 		player_state = Player_State.Stand;
-		direction = EnumConsts.Direction.Right; //Bug making player face right.  Easiest solution would be creating a neutral animation where he faces forward.
 	}
 
 	public boolean is_idle_climb() {
@@ -330,7 +329,7 @@ public class Player extends GameObject {
 		frame_y = 10;
 		frame_x = 0;
 		player_state = Player_State.Climb_Idle;
-		direction = EnumConsts.Direction.Right;
+		direction = EnumConsts.Direction.Up;
 		
 	}
 }

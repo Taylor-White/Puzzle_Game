@@ -67,6 +67,7 @@ public class GameProcessing{
 	public void run(){
 
 		while(true){
+			//Fix multithreading
 			level_builder.setLevel(level_int);
 			new Thread(level_builder).start();
 			while(level_builder.getLock()){
@@ -335,6 +336,7 @@ public class GameProcessing{
 			item_update(item_num, false);
 			Dynamite d = new Dynamite(imgList.getDynamite(), item_num, true);
 			boolean already_dropped = false;
+			System.out.println("player direction: " + player.getDirection());
 			//Drop item in direction player is facing.  If player is facing up/down or the spot for the item to land is impassible, drop item on player
 			if(player.getDirection() == EnumConsts.Direction.Left){
 				if(current_level.isTraversable(player_x-1, player_y)){
@@ -345,6 +347,7 @@ public class GameProcessing{
 				}else{
 					already_dropped = false;
 				}
+				
 			}else if(player.getDirection() == EnumConsts.Direction.Right){
 				if(current_level.isTraversable(player_x+1, player_y)){
 					current_level.add(player_x+1, player_y, d);
@@ -380,7 +383,7 @@ public class GameProcessing{
 		//current_level.printGrid();
 		
 		System.out.println("Player Explode");
-		
+		level_int = 2;
 		this.restart = true;
 		
 	}

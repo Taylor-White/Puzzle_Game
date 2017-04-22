@@ -95,7 +95,7 @@ public class Level_Builder implements Runnable {
 		int p_y = 0;
 		Player p = null;
 		int cc = 0;
-		System.out.println("tiles_in_row: " + tiles_in_row + " and tiles_in_col: " + tiles_in_col);
+		//System.out.println("tiles_in_row: " + tiles_in_row + " and tiles_in_col: " + tiles_in_col);
 
 		for(int y=0; y<tiles_in_row; y++){ // parts.length //tiles_in_row
 			String[] cell;
@@ -207,16 +207,25 @@ public class Level_Builder implements Runnable {
 	//Gets GameObject[][] from a level number
 	public synchronized GameObjectsGrid getLevel(int level, boolean isCurr){
 		String from_file = getStringFromFile(level);
-		GameObjectsGrid level_array = parseLevel(from_file, isCurr);
-		System.out.println("IN LEVEL BUILDER");
-		level_array.printGrid();
-		return level_array;
+		if(from_file != null){
+			GameObjectsGrid level_array = parseLevel(from_file, isCurr);
+			System.out.println("IN LEVEL BUILDER");
+			level_array.printGrid();
+			return level_array;
+		}else{
+			return null;
+		}
 	}
 	
 	//Get String Array From File
 	private String getStringFromFile(int l){
-		File inFile = new File ("./resources/levels/level_" + l + ".txt");
-
+		File inFile;
+		try{
+			inFile = new File ("./resources/levels/level_" + l + ".txt");
+		}catch(Exception e){
+			System.out.println(e);
+			return null;
+		}
 	    Scanner sc;
 		try {
 			sc = new Scanner (inFile);
@@ -244,6 +253,7 @@ public class Level_Builder implements Runnable {
 
 	@Override
 	public void run() {
+		//Add code to set cur level to next if level number is incrememnted by 1
 		lock = true;
 		current_level_unaltered = getLevel(level_number, true);
 		next_level = getLevel(level_number+1, false);
