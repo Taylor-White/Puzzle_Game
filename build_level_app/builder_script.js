@@ -12,11 +12,13 @@ var plt;
 
 var objects;
 
+var isOutput = false;
+
 $( document ).ready(function() {
     console.log( "ready!" );  
     objects = new Image();
     objects.src = './resources/object_sprites.png';
-
+    setToggle();
     setup_pallet_canvas();
     setup_canvas();
     console.log( "Done!" );  
@@ -52,6 +54,8 @@ function updateCanvas(canvas, event) {
   console.log(current_x);
   console.log(current_y);
 
+
+  //TODO: Create a 2d array to store the information when adding and removing values.  Then a way to output the string to a file
   if(current_x != 0 || current_y != 0){
     cnv.drawImage(objects, current_x * CELL_WIDTH, current_y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT,i*CELL_WIDTH, j*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT  );
   }else{
@@ -94,3 +98,27 @@ function updateCurrentBrush(event) {
   $("#brush_spot").css("background-position", "-" + current_x * CELL_WIDTH + "px " + "-" + current_y * CELL_HEIGHT + "px");
   console.log("finished");
 } 
+
+//output
+function setToggle(){
+  $("#output_toggle").click(function() {
+    console.log("output: " + isOutput);
+    if(isOutput){
+      $("#output").css("visibility", "visible");
+      isOutput = false;
+    }else{
+      $("#output").css("visibility", "hidden");
+        isOutput = true;
+    }
+  });  
+}
+function setupOutputButton(){
+  console.log("output: " + isOutput);
+  if(isOutput){
+    $("#output").css("visibility", "visible");
+    isOutput = false;
+  }else{
+    $("#output").css("visibility", "hidden");
+      isOutput = true;
+  }
+}
