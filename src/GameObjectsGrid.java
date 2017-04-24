@@ -100,7 +100,13 @@ public class GameObjectsGrid {
 		return null;
 	}
 	public boolean isTraversable(int x, int y) {
-		if(gameObjectGrid[x][y] == null){return false;}
+		if (x < 0 || x >= tiles_in_col || y < 0 || y >= tiles_in_row) {
+	        System.out.println("Out of Bounds!");
+	        return false;
+	    }else if(gameObjectGrid[x][y] == null){
+	    	return false;
+	    }
+	 
 		List<GameObject> list = gameObjectGrid[x][y].getList();
 		
 		for(int i=0; i<list.size(); i++){

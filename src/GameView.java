@@ -29,6 +29,7 @@ public class GameView extends JPanel{
 	//Inventory Labels
 	ArrayList<JLabel> item_label;
 	
+	JPanel inventory_panel;
 	
 	//Canvas Constants
 	private final int PIXELS_IN_TILE_X = 32;
@@ -143,7 +144,7 @@ public class GameView extends JPanel{
         if (isPreferredSizeSet()) {
             return super.getPreferredSize();
         }
-        return new Dimension(PIXELS_IN_TILE_Y * tiles_in_col, PIXELS_IN_TILE_X * tiles_in_row);
+        return new Dimension(PIXELS_IN_TILE_X * tiles_in_row, PIXELS_IN_TILE_Y * tiles_in_col);
     }
 
 	public int getViewSizeX() {
@@ -159,7 +160,7 @@ public class GameView extends JPanel{
 	}
 	
 	private void setupInventoryWindow(String s) {
-		JPanel inventory_panel = new JPanel();
+		inventory_panel = new JPanel();
 		inventory_panel.setBackground(Color.RED);
 		inventory_panel.setPreferredSize(new Dimension(ITEM_WINDOW*32, ITEM_WINDOW*32));
 		

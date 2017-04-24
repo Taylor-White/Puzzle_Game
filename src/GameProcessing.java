@@ -179,7 +179,7 @@ public class GameProcessing{
 		}
 	}
 	private boolean itemShouldFall(int obj_x, int obj_y) {
-		return !(current_level.isGround(obj_x, (obj_y+1)));
+		return !(current_level.isGround(obj_x, (obj_y+1)) || obj_y > tiles_in_col-2);
 	}
 	private void checkPlayerFalling() {
 		if(!input_blocked && shouldFall(player_x, player_y)){
@@ -224,7 +224,6 @@ public class GameProcessing{
 		}
 		if(player.halfWayThere()){
 			EnumConsts.Direction direction = player.getDirection();
-			//move_from_fall(player_x, player_y, EnumConsts.Object_Name.Player);
 			move_object_in_grid(player, direction);
 			//Fix for animation after climbing
 		}
@@ -284,7 +283,7 @@ public class GameProcessing{
 		obj.startFalling();
 	}
 	private boolean shouldFall(int x, int y) {
-		return !(current_level.isGround(x, (y+1)) || current_level.isGround(x, (y)));
+		return !(current_level.isGround(x, (y+1)) || current_level.isGround(x, (y)) || y > tiles_in_col-2 /* out of bounds */);
 	}
 	
 	public void perform_action(EnumConsts.Player_Action action){
@@ -389,74 +388,90 @@ public class GameProcessing{
 	}
 	
 	/*
-	 * Building Dynamite Animation
+	 * Building Dynamite Explosion Animation
 	 */
 	private void build_dynamite_v(Movable_Object obj, int x, int y, int i) {
 		//FIX BUT WITH GOING OUT OF BOUNDS
 		Movable_Object mv;
 		
 		//Middle sprite
-		mv = new Movable_Object(x, y, new Explosion(2, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
-		//vertical sprite up one
-		y = y-1;		
-		mv = new Movable_Object(x, y, new Explosion(1, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
-		
-		//vertical sprite up two
+		if(isValid(x,y)){
+			mv = new Movable_Object(x, y, new Explosion(2, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
+		y = y-1;	
+		System.out.println("isValid: " + isValid(x,y));
+		if(isValid(x,y)){
+			//vertical sprite up one
+			mv = new Movable_Object(x, y, new Explosion(1, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
 		y = y-1;
-		mv = new Movable_Object(x, y, new Explosion(0, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
-		
-		//vertical sprite down one
-		y = y+3;
-		mv = new Movable_Object(x, y, new Explosion(3, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		
-		active_objects.add(mv);
-		
-		//vertical sprite down two
-		y = y+1;
-		mv = new Movable_Object(x, y, new Explosion(4, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
+		if(isValid(x,y)){
+			//vertical sprite up two
+			mv = new Movable_Object(x, y, new Explosion(0, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
 		}
+		y = y+3;
+		if(isValid(x,y)){
+			//vertical sprite down one
+			mv = new Movable_Object(x, y, new Explosion(3, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
+		y = y+1;
+		if(isValid(x,y)){
+			//vertical sprite down two
+			mv = new Movable_Object(x, y, new Explosion(4, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}
+	}
 	
 	private void build_dynamite_h(Movable_Object obj, int x, int y, int i) {
 		//FIX BUT WITH GOING OUT OF BOUNDS
-		
-		//Middle sprite
-		Movable_Object mv = new Movable_Object(x, y, new Explosion(7, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
-		
-		//horizontal sprite up one
-		x = x-1;		
-		mv = new Movable_Object(x, y, new Explosion(6, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
-		
+		Movable_Object mv;
+		if(isValid(x,y)){
+			//Middle sprite
+			mv = new Movable_Object(x, y, new Explosion(7, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}
 		//horizontal sprite up one
 		x = x-1;
-		mv = new Movable_Object(x, y, new Explosion(5, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
-		
+		if(isValid(x,y)){
+			mv = new Movable_Object(x, y, new Explosion(6, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}
+		//horizontal sprite up one
+		x = x-1;
+		if(isValid(x,y)){
+			mv = new Movable_Object(x, y, new Explosion(5, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}
 		//horizontal sprite down one
 		x = x+3;
-		mv = new Movable_Object(x, y, new Explosion(8, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		
-		active_objects.add(mv);
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(8, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			
+			active_objects.add(mv);
+		}	
 		
 		//horizontal sprite down two
 		x = x+1;
-		mv = new Movable_Object(x, y, new Explosion(9, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(9, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
 	}	
 		
 		
@@ -464,60 +479,88 @@ public class GameProcessing{
 	private void build_dynamite_c(Movable_Object obj, int x, int y, int i) {
 		//FIX BUT WITH GOING OUT OF BOUNDS
 		//Middle sprite
-		Movable_Object mv = new Movable_Object(x, y, new Explosion(10, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
+		Movable_Object mv;
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(10, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
 		//vertical sprite up one
-		y = y-1;		
-		mv = new Movable_Object(x, y, new Explosion(1, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
+		y = y-1;	
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(1, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}
 		
 		//vertical sprite up two
 		y = y-1;
-		mv = new Movable_Object(x, y, new Explosion(0, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
+		if(isValid(x,y)){
+	
+			mv = new Movable_Object(x, y, new Explosion(0, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
 		
 		//vertical sprite down one
 		y = y+3;
-		mv = new Movable_Object(x, y, new Explosion(3, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		
-		active_objects.add(mv);
+		if(isValid(x,y)){
+	
+			mv = new Movable_Object(x, y, new Explosion(3, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			
+			active_objects.add(mv);
+		}	
 		
 		//vertical sprite down two
 		y = y+1;
-		mv = new Movable_Object(x, y, new Explosion(4, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(4, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
 
 		y = y-2;
 		
 		//horizontal sprite up one
-		x = x-1;		
-		mv = new Movable_Object(x, y, new Explosion(6, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
+		x = x-1;
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(6, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
 		
 		//horizontal sprite up one
 		x = x-1;
-		mv = new Movable_Object(x, y, new Explosion(5, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
+		if(isValid(x,y)){
+	
+			mv = new Movable_Object(x, y, new Explosion(5, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
 		
 		//horizontal sprite down one
 		x = x+3;
-		mv = new Movable_Object(x, y, new Explosion(8, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		
-		active_objects.add(mv);
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(8, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			
+			active_objects.add(mv);
+		}	
 		
 		//horizontal sprite down two
 		x = x+1;
-		mv = new Movable_Object(x, y, new Explosion(9, imgList.getExplosion()));
-		current_level.add(x, y, mv.getObj());
-		active_objects.add(mv);
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(9, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
 		
 	}
 	//End Dynamite Animation Building
@@ -603,6 +646,13 @@ public class GameProcessing{
     }
 
 
+    private boolean isValid(int x, int y){
+    	System.out.println("x: " + x + " y: " + y + " tiles_row: " + tiles_in_row + " tiles_col: " + tiles_in_col);
+    	if(x < 0 || x > tiles_in_row || y < 0 || y > tiles_in_col){
+    		return false;
+    	}
+    	return true;
+    }
 }
 
 	

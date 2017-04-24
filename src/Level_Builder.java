@@ -14,12 +14,6 @@ public class Level_Builder implements Runnable {
 	private int cur_player_y;
 	private int cur_coin_count;
 	private List<GameObject> current_level_moving_objects = new ArrayList<GameObject>();
-	private GameObjectsGrid next_level;
-	private Player next_player;
-	private int next_player_x;
-	private int next_player_y;
-	private int nxt_coin_count;
-	private List<GameObject> next_level_moving_objects = new ArrayList<GameObject>();
 	private final int tiles_in_row;
 	private final int tiles_in_col;
 	private int level_number;
@@ -65,25 +59,10 @@ public class Level_Builder implements Runnable {
 	public int getCurCoinCount(){
 		return cur_coin_count;
 	}
-	public int getNextPlayerX(){
-		return next_player_x;
-	}
-	public int getNextPlayerY(){
-		return next_player_y;
-	}
-	public Player getNextPlayer(){
-		return next_player;
-	}
-	public int getNextCoinCount(){
-		return nxt_coin_count;
-	}
-	public GameObjectsGrid getNextLevel(){
-		return next_level;
-	}
 	
 	
 	//Convert File Data to GameObject 2D Array
-	private GameObjectsGrid parseLevel(String from_file, boolean isCurr) {
+	private GameObjectsGrid parseLevel(String from_file) {
 		boolean h_error = false;
 		boolean w_error = false;
 
@@ -185,19 +164,12 @@ public class Level_Builder implements Runnable {
 			}
 		}
 		level_object.setGameObjectGrid(level_array);
-		if(isCurr){
-			this.cur_player = p;
-			this.cur_player_x = p_x;
-			this.cur_player_y = p_y;
-			this.cur_coin_count = cc;
-			current_level_unaltered = level_object;
-		}else{
-			this.next_player = p;
-			this.next_player_x = p_x;
-			this.next_player_y = p_y;
-			this.nxt_coin_count = cc;
-			next_level = level_object;
-		}
+		this.cur_player = p;
+		this.cur_player_x = p_x;
+		this.cur_player_y = p_y;
+		this.cur_coin_count = cc;
+		current_level_unaltered = level_object;
+	
 		System.out.println("Level_array: " + level_array);
 		System.out.println("done parsing level...");
 		return level_object;
@@ -208,7 +180,7 @@ public class Level_Builder implements Runnable {
 	public synchronized GameObjectsGrid getLevel(int level, boolean isCurr){
 		String from_file = getStringFromFile(level);
 		if(from_file != null){
-			GameObjectsGrid level_array = parseLevel(from_file, isCurr);
+			GameObjectsGrid level_array = parseLevel(from_file);
 			System.out.println("IN LEVEL BUILDER");
 			level_array.printGrid();
 			return level_array;
@@ -256,7 +228,6 @@ public class Level_Builder implements Runnable {
 		//Add code to set cur level to next if level number is incrememnted by 1
 		lock = true;
 		current_level_unaltered = getLevel(level_number, true);
-		next_level = getLevel(level_number+1, false);
 		lock = false;
 	}
 
