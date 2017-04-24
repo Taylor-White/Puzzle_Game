@@ -1,9 +1,8 @@
 #brush_spot{
-	/*width = 32px;
-	height = 32px;
-	background-color: url('./resources/object_sprites.png') 0 32;
-	background-color: #000;*/
-
+	width: 32px;
+	height: 32px;
+	background: url("./resources/object_sprites.png") -32px 0;
+	background-position: -32px 0;
 }
 
 canvas {
