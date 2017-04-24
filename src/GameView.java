@@ -191,13 +191,13 @@ public class GameView extends JPanel{
 		
 		ImageIcon explosive_h = new ImageIcon("./resources/sprites/inventory/explosive_v.png");
 		ImageIcon explosive_v = new ImageIcon("./resources/sprites/inventory/explosive_h.png");
-		ImageIcon explosive_o = new ImageIcon("./resources/sprites/inventory/explosive_o.png");
 		ImageIcon explosive_c = new ImageIcon("./resources/sprites/inventory/explosive_c.png");
+		ImageIcon explosive_o = new ImageIcon("./resources/sprites/inventory/explosive_o.png");
 		
 		item_1.setIcon(explosive_h);
 		item_2.setIcon(explosive_v);
-		item_3.setIcon(explosive_o);
-		item_4.setIcon(explosive_c);
+		item_3.setIcon(explosive_c);
+		item_4.setIcon(explosive_o);
 		
 		
 		inventory_panel.add(new JLabel(s + ":"));

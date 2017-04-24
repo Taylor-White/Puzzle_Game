@@ -10,6 +10,8 @@ public class Coin extends GameObject {
 	private int idle_timer;
 	private final static int TIME_TO_IDLE_ANIMATION = 12;
 	
+	private static int coin_count = 0;
+	
 	public Coin(BufferedImage imgList){
 		super(imgList, false, true, true, false, false, EnumConsts.Object_Name.Coin);
 		animation_lengths = new int[2];
@@ -45,7 +47,16 @@ public class Coin extends GameObject {
 	}
 	
 	public boolean destroy(){
+		setCoin_count(getCoin_count() - 1);
 		return true;
+	}
+
+	public static int getCoin_count() {
+		return coin_count;
+	}
+
+	public static void setCoin_count(int coin_count) {
+		Coin.coin_count = coin_count;
 	}
 	
 

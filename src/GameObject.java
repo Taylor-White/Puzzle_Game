@@ -1,8 +1,5 @@
 import java.awt.image.BufferedImage;
 
-
-
-
 public abstract class GameObject {
 	protected final static int TILE_SIZE = 32;
 	
@@ -27,11 +24,13 @@ public abstract class GameObject {
 		return;
 	}
 	
+	/*
+	 * Getters
+	 */
 	public BufferedImage getDefaultImage(){
 		if(image_frames == null){
 			return null;
 		}
-		//return image_frames[default_image_index];
 		return image_frames.getSubimage(0, 0, TILE_SIZE, TILE_SIZE);
 	}
 	
@@ -60,38 +59,57 @@ public abstract class GameObject {
 	public void animate(){
 		return;
 	}
-	public int[] getOffset(int tile_size_x, int tile_size_y){
-		return new int[]{0,0};
-	}
+
 
 	public boolean isItem() {
 		return isItem;
-	}
-
-	public int getItemNumber() {
-		// TODO Auto-generated method stub
-		return -1;
-	}
-
-	public boolean halfWayThere() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean isFalling() {
-		return false;
-	}
-	
-	public void startFalling(){
-		
 	}
 
 	public boolean isDeath() {
 		return isDeath;
 	}
 
+
+	
+	/*
+	 * Override for items
+	 */
+	public int getItemNumber() {
+		return -1;
+	}
+
+	/*
+	 * Override for movable objects
+	 */
+	public boolean halfWayThere() {
+		return false;
+	}
+
+	/*
+	 * Override for movable objects
+	 */
+	public boolean isFalling() {
+		return false;
+	}
+	
+	/*
+	 * Override for movable objects
+	 */
+	public void startFalling(){
+		
+	}
+	
+	/*
+	 * Overrite for Movable objects
+	 */
+	public int[] getOffset(int tile_size_x, int tile_size_y){
+		return new int[]{0,0};
+	}
+
+	/*
+	 * Override for objects which need a type such as dynamite
+	 */
 	public int getType() {
-		// TODO Auto-generated method stub
 		return -1;
 	}
 

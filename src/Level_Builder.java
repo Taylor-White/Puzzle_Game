@@ -9,11 +9,11 @@ import java.util.Scanner;
 public class Level_Builder implements Runnable {
 
 	private GameObjectsGrid current_level_unaltered;
-	private Player cur_player;
-	private int cur_player_x;
-	private int cur_player_y;
-	private int cur_coin_count;
-	private List<GameObject> current_level_moving_objects = new ArrayList<GameObject>();
+	private Player player;
+	private int player_x;
+	private int player_y;
+	private int coin_count;
+	private List<GameObject> moving_objects = new ArrayList<GameObject>();
 	private final int tiles_in_row;
 	private final int tiles_in_col;
 	private int level_number;
@@ -33,10 +33,10 @@ public class Level_Builder implements Runnable {
 		this.tiles_in_col = tiles_in_col;
 		this.imgList = il;
 		this.level_number = 1;
-		cur_player = null;
-		cur_player_x = 0;
-		cur_player_y = 0;
-		getLevel(level_number, true);
+		player = null;
+		player_x = 0;
+		player_y = 0;
+		getLevel(level_number);
 	}
 	
 	public void setLevel(int i){
@@ -47,17 +47,17 @@ public class Level_Builder implements Runnable {
 	public GameObjectsGrid getCurrentLevel(){
 		return current_level_unaltered;
 	}
-	public int getCurPlayerX(){
-		return cur_player_x;
+	public int getPlayerX(){
+		return player_x;
 	}
-	public int getCurPlayerY(){
-		return cur_player_y;
+	public int getPlayerY(){
+		return player_y;
 	}
-	public Player getCurPlayer(){
-		return cur_player;
+	public Player getPlayer(){
+		return player;
 	}
-	public int getCurCoinCount(){
-		return cur_coin_count;
+	public int getCoinCount(){
+		return coin_count;
 	}
 	
 	
@@ -164,10 +164,10 @@ public class Level_Builder implements Runnable {
 			}
 		}
 		level_object.setGameObjectGrid(level_array);
-		this.cur_player = p;
-		this.cur_player_x = p_x;
-		this.cur_player_y = p_y;
-		this.cur_coin_count = cc;
+		this.player = p;
+		this.player_x = p_x;
+		this.player_y = p_y;
+		this.coin_count = cc;
 		current_level_unaltered = level_object;
 	
 		System.out.println("Level_array: " + level_array);
@@ -177,7 +177,7 @@ public class Level_Builder implements Runnable {
 	}
 			
 	//Gets GameObject[][] from a level number
-	public synchronized GameObjectsGrid getLevel(int level, boolean isCurr){
+	public synchronized GameObjectsGrid getLevel(int level){
 		String from_file = getStringFromFile(level);
 		if(from_file != null){
 			GameObjectsGrid level_array = parseLevel(from_file);
@@ -225,9 +225,8 @@ public class Level_Builder implements Runnable {
 
 	@Override
 	public void run() {
-		//Add code to set cur level to next if level number is incrememnted by 1
 		lock = true;
-		current_level_unaltered = getLevel(level_number, true);
+		current_level_unaltered = getLevel(level_number);
 		lock = false;
 	}
 

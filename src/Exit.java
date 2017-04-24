@@ -19,17 +19,16 @@ public class Exit extends GameObject {
 		animation_lengths[1] = 7;
 		animation_lengths[2] = 1;
 	}
-	//coin.getSubimage(xGrid * TILE_SIZE, yGrid * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	
 	public void animate(){
     	setNextFrame();
-    	//Opens door when coins are collected.  Need a way to count coins that makes sense.
-		/*if(GameProcessing.coin_count() == 0 && isOpen == false){
+    	//Opens door when coins are collected.
+		if(Coin.getCoin_count() == 0 && isOpen == false){
 			System.out.println("DOOR OPENING");
 			frame_x = 0;
 			frame_y = 1;
 			isOpen = true;
-		}*/
+		}
 		if(frame_x == 7 && frame_y == 1){
 			frame_x = 0;
 			frame_y = 2;

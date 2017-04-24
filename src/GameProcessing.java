@@ -80,9 +80,10 @@ public class GameProcessing{
 			active_objects.clear();
 			//Need a function for setting these
 			this.current_level = level_builder.getCurrentLevel();
-			this.player = level_builder.getCurPlayer();
-			this.player_x = level_builder.getCurPlayerX();
-			this.player_y = level_builder.getCurPlayerY();
+			this.player = level_builder.getPlayer();
+			this.player_x = level_builder.getPlayerX();
+			this.player_y = level_builder.getPlayerY();
+			Coin.setCoin_count(level_builder.getCoinCount());
 			System.out.println("gameView: " + gameView.toString());
 			gameView.drawing(current_level);
 			
@@ -148,15 +149,15 @@ public class GameProcessing{
 					int tmp_y = obj.getY();
 					current_level.remove(tmp_x, tmp_y, obj.getObj());
 					active_objects.remove(i);
-					//build_dynamite_c(obj, obj.getX(), obj.getY(), i);
+					build_dynamite_c(obj, obj.getX(), obj.getY(), i);
+					
+				}else if(obj.getObj().getType() == 3){ //Circle
 
-				}else if(obj.getObj().getType() == 3){ //Cross
 					int tmp_x = obj.getX();
 					int tmp_y = obj.getY();
 					current_level.remove(tmp_x, tmp_y, obj.getObj());
 					active_objects.remove(i);
-					build_dynamite_c(obj, obj.getX(), obj.getY(), i);
-
+					build_dynamite_o(obj, obj.getX(), obj.getY(), i);
 				}
 			}else if(obj.getObj().getName() == EnumConsts.Object_Name.Explosion && obj.getObj().destroy()){
 				int tmp_x = obj.getX();
@@ -382,7 +383,7 @@ public class GameProcessing{
 		//current_level.printGrid();
 		
 		System.out.println("Player Explode");
-		level_int = 2;
+		level_int = 1;
 		this.restart = true;
 		
 	}
@@ -563,6 +564,95 @@ public class GameProcessing{
 		}	
 		
 	}
+	
+	private void build_dynamite_o(Movable_Object obj, int x, int y, int i) {
+		//FIX BUT WITH GOING OUT OF BOUNDS
+		//sprite up one and left one
+		Movable_Object mv;
+		y=y-1;
+		x=x-1;
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(11, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
+		//sprite left one
+		y = y+1;	
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(12, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}
+		
+		//sprite left one down one
+		y = y+1;
+		if(isValid(x,y)){
+	
+			mv = new Movable_Object(x, y, new Explosion(13, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
+		
+		//sprite up one
+		x=x+1;
+		y = y-2;
+		if(isValid(x,y)){
+	
+			mv = new Movable_Object(x, y, new Explosion(14, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			
+			active_objects.add(mv);
+		}	
+		
+		//middle
+		y = y+1;
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(15, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
+		
+		//sprite down one
+		y = y+1;
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(16, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}
+		
+		y=y-2;
+		x=x+1;
+		
+		//sprite up one right one
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(17, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
+		//sprite left one
+		y = y+1;	
+		if(isValid(x,y)){
+
+			mv = new Movable_Object(x, y, new Explosion(18, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}
+		
+		//sprite left one down one
+		y = y+1;
+		if(isValid(x,y)){
+	
+			mv = new Movable_Object(x, y, new Explosion(19, imgList.getExplosion()));
+			current_level.add(x, y, mv.getObj());
+			active_objects.add(mv);
+		}	
+		
+	}
 	//End Dynamite Animation Building
 	
 	public void paintThisFrame(){
@@ -570,7 +660,7 @@ public class GameProcessing{
 	}
 	
 	/*
-	 * Player Action Methonds
+	 * Player Action Methods
 	 */
     private void Move_Left(EnumConsts.Player_Action action) {
     	System.out.println("MoveAction Called");
