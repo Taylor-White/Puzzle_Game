@@ -76,6 +76,9 @@ public class GameObjectsGrid {
 	}
 
 	public boolean isGround(int x, int y) {
+		if(!isValid(x,y)){
+			return true;
+		}
 		if(gameObjectGrid[x][y] == null){return false;}
 		List<GameObject> list = gameObjectGrid[x][y].getList();
 		
@@ -100,7 +103,7 @@ public class GameObjectsGrid {
 		return null;
 	}
 	public boolean isTraversable(int x, int y) {
-		if (x < 0 || x >= tiles_in_col || y < 0 || y >= tiles_in_row) {
+    	if(x < 0 || x > tiles_in_row || y < 0 || y > tiles_in_col){
 	        System.out.println("Out of Bounds!");
 	        return false;
 	    }else if(gameObjectGrid[x][y] == null){
@@ -260,7 +263,12 @@ public class GameObjectsGrid {
 
 
 
-
+    private boolean isValid(int x, int y){
+    	if(x < 0 || x > tiles_in_row || y < 0 || y > tiles_in_col){
+    		return false;
+    	}
+    	return true;
+    }
 
 
 

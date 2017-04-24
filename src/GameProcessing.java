@@ -67,7 +67,7 @@ public class GameProcessing{
 	public void run(){
 
 		while(true){
-			//Fix multithreading
+			//Fix Loading Levels
 			level_builder.setLevel(level_int);
 			new Thread(level_builder).start();
 			while(level_builder.getLock()){
