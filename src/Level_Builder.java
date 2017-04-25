@@ -42,6 +42,9 @@ public class Level_Builder implements Runnable {
 	
 	//Convert File Data to GameObject 2D Array
 	private GameObjectsGrid parseLevel(String from_file) {
+		
+		System.out.println("Length of file is: " + getLengthOfGrid(from_file));
+		
 		boolean h_error = false;
 		boolean w_error = false;
 
@@ -97,16 +100,9 @@ public class Level_Builder implements Runnable {
 				            	new_cell.add(new Indestructable(img_set, Integer.parseInt(object_char)));
 		            		break;
 				            case 'c':
-				            	//Change this to match with block
-				            	if(object_char.charAt(1) == '1'){
-				            		img_set = imgList.getCoin();
-					            	new_cell.add(new Coin(img_set));
-				            	}else if(object_char.charAt(1) == '2'){
-				            		img_set = imgList.getCoinAlternate();
-					            	new_cell.add(new Coin(img_set));
-				            	}else{
-				            		System.out.println("error::::::");
-				            	}
+				            	object_char = object_char.substring(1);
+								img_set = imgList.getCoin();
+				            	new_cell.add(new Coin(img_set, Integer.parseInt(object_char)));
 				            	cc++; //Increment coin count
 
 		                    break;
@@ -156,6 +152,28 @@ public class Level_Builder implements Runnable {
 		
 	}
 			
+	private int getLengthOfGrid(String from_file) {
+		int len = 0;
+		int tmp_len = 0;
+		String[] parts = from_file.split("\n");
+		for(int y=0; y<parts.length; y++){ // parts.length //tiles_in_row
+			String[] cell;
+			try{
+				cell = parts[y].split(",");
+			}catch(Exception e){
+				cell = new String[]{"_"};
+			}
+			
+			for(int x=0; x<cell.length; x++){ // cell.length //tiles_in_col
+				tmp_len++;
+			}
+			if(tmp_len > len)
+				len = tmp_len;
+			tmp_len= 0;
+		}
+		return len;
+	}
+
 	//Gets GameObject[][] from a level number
 	public synchronized void setLevel(int level){
 		String from_file = getStringFromFile(level);

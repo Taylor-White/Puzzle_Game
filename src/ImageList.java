@@ -11,7 +11,6 @@ public class ImageList {
 	private static BufferedImage block;
 	private static BufferedImage indestructible;
 	private static BufferedImage coin;
-	private static BufferedImage coin_alternate;
 	private static BufferedImage player;
 	private static BufferedImage ladder;
 	private static BufferedImage exit;
@@ -25,7 +24,6 @@ public class ImageList {
 	public void initialize(){
 		BufferedImage block_img = null;
 		BufferedImage coin_img = null;
-		BufferedImage coin_alternate_img = null;
 		BufferedImage player_img = null;
 		BufferedImage indestructible_img = null;
 		BufferedImage ladder_img = null;
@@ -57,14 +55,6 @@ public class ImageList {
 	         System.out.println("Error: " + e);
 	      }
 		ImageList.coin = coin_img;
-		
-		//Initialize Coin Image Alternate
-		try {
-			coin_alternate_img = ImageIO.read(new File("./resources/sprites/coin2.png"));
-	      } catch(IOException e) {
-	         System.out.println("Error: " + e);
-	      }
-		ImageList.coin_alternate = coin_alternate_img;
 		
 		//Initialize Player Image
 		try {
@@ -123,11 +113,6 @@ public class ImageList {
 	public BufferedImage getLadder() {
 		return ladder;
 	}
-
-	public BufferedImage getCoinAlternate() {
-		return coin_alternate;
-	}
-	
 	public BufferedImage getDynamite() {
 		return dynamite;
 	}

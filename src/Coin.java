@@ -9,14 +9,21 @@ public class Coin extends GameObject {
 	private int[] animation_lengths;
 	private int idle_timer;
 	private final static int TIME_TO_IDLE_ANIMATION = 12;
+	private final static int FRAME_DELAY = 1;
+	private int current_frame_delay_counter = FRAME_DELAY;
 	
 	private static int coin_count = 0;
 	
-	public Coin(BufferedImage imgList){
+	public Coin(BufferedImage imgList, int style){
 		super(imgList, false, true, true, false, false, EnumConsts.Object_Name.Coin);
 		animation_lengths = new int[2];
 		animation_lengths[0] = 6;
-		animation_lengths[1] = 3;
+		animation_lengths[1] = 6;
+		this.frame_y = style;		
+		System.out.println("imgList.getHeight(): " + imgList.getHeight());
+		if(imgList.getHeight() < frame_y*TILE_SIZE + TILE_SIZE){
+			this.frame_y = 0;
+		}	
 	}
 
 	public void animate(){

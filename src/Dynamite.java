@@ -34,6 +34,10 @@ public class Dynamite extends GameObject{
 	public Dynamite(BufferedImage imgList, int style, boolean ignited){
 		super(imgList, false, true, true, true, false, EnumConsts.Object_Name.Dynamite);
 		this.frame_y = style;
+		//If style number is out of bounds, change style type to default
+		if(imgList.getHeight() < frame_y*TILE_SIZE  + TILE_SIZE){
+			this.frame_y = 0;
+		}	
 		dynamite_number = style;
 		isIgnited = ignited;
 		time_until_detonate = DETONATION_TIME;

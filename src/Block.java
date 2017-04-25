@@ -16,7 +16,7 @@ public class Block extends GameObject {
 		this.graphics_style_x = style % IMAGE_ROW_LENGTH;
 		
 		//If style number is out of bounds, change style type to default
-		if(imgList.getWidth() < graphics_style_x*TILE_SIZE || imgList.getHeight() < graphics_style_y*TILE_SIZE){
+		if(imgList.getWidth() < graphics_style_x*TILE_SIZE  + TILE_SIZE || imgList.getHeight() < graphics_style_y*TILE_SIZE  + TILE_SIZE){
 			this.graphics_style_x = 0;
 			this.graphics_style_y = 0;
 		}	

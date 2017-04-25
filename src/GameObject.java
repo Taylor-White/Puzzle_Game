@@ -1,5 +1,10 @@
 import java.awt.image.BufferedImage;
 
+/*
+ * Generic object for storing information about a game object.
+ * 
+ * In the future should have 'movable objects' and 'immobile objects' inherit from GameObject because these two categories share many of the same methods and variables
+ */
 public abstract class GameObject {
 	protected final static int TILE_SIZE = 32;
 	
