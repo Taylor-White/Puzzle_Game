@@ -224,7 +224,6 @@ public class GameProcessing{
 		if(current_level.isExit(player_x, player_y)){
 			//Win Level!!!
 			System.out.println("Level Won");
-			System.out.println("level int asdf: " + level_int);
 			level_int++;
 			this.restart = true;
 		}

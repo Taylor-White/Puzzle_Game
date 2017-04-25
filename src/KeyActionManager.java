@@ -14,7 +14,6 @@ public class KeyActionManager {
 	public Action add(EnumConsts.Player_Action a){
 		Action action = new Action(a);
 		keylist.add(action);
-		System.out.println("Adding action: " + action.toString());
 		return action;
 	}
 	public Action getAt(int i){
@@ -42,7 +41,7 @@ public class KeyActionManager {
 		@Override
         public void actionPerformed(ActionEvent e) {
 			KeyActionManager.this.next_action = action;
-        	System.out.println("Next Action: " + KeyActionManager.this.next_action);
+        	//System.out.println("Next Action: " + KeyActionManager.this.next_action);
         }
     }
 
