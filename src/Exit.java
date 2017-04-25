@@ -13,7 +13,7 @@ public class Exit extends GameObject {
 	private boolean isOpen = false;
 	
 	public Exit(BufferedImage imgList){
-		super(imgList, false, true, false, false, false, EnumConsts.Object_Name.Coin);
+		super(imgList, false, true, false, false, false, EnumConsts.Object_Name.Exit);
 		animation_lengths = new int[3];
 		animation_lengths[0] = 0;
 		animation_lengths[1] = 7;
@@ -55,5 +55,9 @@ public class Exit extends GameObject {
 		return image_frames.getSubimage(frame_x * TILE_SIZE, frame_y * TILE_SIZE, TILE_SIZE, TILE_SIZE);
 	}
 	
+	public boolean getIsOpen(){
+		System.out.println("returning isOpen: " + isOpen);
+		return isOpen;
+	}
 
 }

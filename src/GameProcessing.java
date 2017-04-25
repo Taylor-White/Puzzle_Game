@@ -85,6 +85,7 @@ public class GameProcessing{
 					e.printStackTrace();
 				}
 			}
+			
 			level_list.add(level_builder.getLevelDetails());
 			
 			
@@ -111,7 +112,7 @@ public class GameProcessing{
 				checkItemsFalling();
 				checkRemovingObjects();
 				checkCollisions();
-				
+				checkLevelWin();
 				//checkPlayerDeath();
 				//if player dies, break loop and restart level
 				if(restart){
@@ -214,9 +215,21 @@ public class GameProcessing{
 			Movable_Object mo = active_objects.get(i);
 			current_level.checkCollision(mo.getObj(), mo.getX(), mo.getY());
 		}
+		
 		checkPlayerDeath();
 	}
 	
+	private void checkLevelWin() {
+		
+		if(current_level.isExit(player_x, player_y)){
+			//Win Level!!!
+			System.out.println("Level Won");
+			System.out.println("level int asdf: " + level_int);
+			level_int++;
+			this.restart = true;
+		}
+		
+	}
 	private void adjust_positions() {
 		//for(objects in grid that can move)
 		for(int i=0; i<active_objects.size(); i++){
@@ -752,6 +765,7 @@ public class GameProcessing{
      */
 	private void initializeLevelVariables() {
 		active_objects.clear();
+		
 		this.current_level = level_list.get(level_int).getLevelGrid();
 		this.player = level_list.get(level_int).getPlayer();
 		this.player_x = level_list.get(level_int).getPlayer_x();

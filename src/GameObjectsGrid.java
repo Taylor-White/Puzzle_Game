@@ -151,6 +151,21 @@ public class GameObjectsGrid {
 		return false;
 	}
 	
+	/*
+	 * Check if a player is sharing the same tile as an exit door which is open
+	 */
+	public boolean isExit(int x, int y) {
+		if(gameObjectGrid[x][y] == null){return false;}
+		List<GameObject> list = gameObjectGrid[x][y].getList();
+		
+		for(int i=0; i<list.size(); i++){
+			if(list.get(i).getName() == EnumConsts.Object_Name.Exit){
+				return list.get(i).getIsOpen();
+			}
+		}
+		return false;
+	}
+	
 	public void moveObjectTo(GameObject obj, int from_x, int from_y, int to_x, int to_y) {
 		gameObjectGrid[from_x][from_y].remove(obj);
 		gameObjectGrid[to_x][to_y].add(obj);
@@ -282,6 +297,7 @@ public class GameObjectsGrid {
     	}
     	return true;
     }
+
 
 
 

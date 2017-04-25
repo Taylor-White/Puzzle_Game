@@ -113,4 +113,11 @@ public abstract class GameObject {
 		return -1;
 	}
 
+	/*
+	 * Override for objects which can open
+	 */
+	public boolean getIsOpen() {
+		return false;
+	}
+
 }
