@@ -12,3 +12,8 @@ canvas {
 #tile_canvas{
 	content:url('./resources/object_sprites.png');
 }
+
+#output
+{
+  white-space:pre-wrap;
+}

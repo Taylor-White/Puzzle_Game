@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -33,8 +34,9 @@ public class GameProcessing{
 	
 	//Level Stuff
 	private Level_Builder level_builder;
-	private int level_int = 1;
+	private int level_int;
 	private boolean restart = false;
+	List<Level_Details> level_list;
 
 	public GameProcessing(int tiles_in_row, int tiles_in_col, GameView gv){
 		//Setup Variables
@@ -53,13 +55,16 @@ public class GameProcessing{
 		System.out.println(imgList.toString());
 		
 		//Initialize current level to '1'
-		level_int = 1;
+		level_int = 0;
 		
 		//Blank Level
 		this.current_level = new GameObjectsGrid(tiles_in_row, tiles_in_col);
 		
 		//Build Level
-		level_builder = new Level_Builder(tiles_in_row, tiles_in_col, imgList);
+		level_builder = new Level_Builder(tiles_in_row, tiles_in_col, imgList, level_int);
+		
+		//Storage for future levels
+		level_list = new ArrayList<Level_Details>();
 		
 		//Set Inventory to Empty
 		items = new int[]{0,0,0,0};
@@ -67,7 +72,10 @@ public class GameProcessing{
 	public void run(){
 
 		while(true){
+			
+			
 			//Fix Loading Levels
+			System.out.println("SET LEVEL: " + level_int);
 			level_builder.setLevel(level_int);
 			new Thread(level_builder).start();
 			while(level_builder.getLock()){
@@ -77,14 +85,10 @@ public class GameProcessing{
 					e.printStackTrace();
 				}
 			}
-			active_objects.clear();
-			//Need a function for setting these
-			this.current_level = level_builder.getCurrentLevel();
-			this.player = level_builder.getPlayer();
-			this.player_x = level_builder.getPlayerX();
-			this.player_y = level_builder.getPlayerY();
-			Coin.setCoin_count(level_builder.getCoinCount());
-			System.out.println("gameView: " + gameView.toString());
+			level_list.add(level_builder.getLevelDetails());
+			
+			
+			initializeLevelVariables();
 			gameView.drawing(current_level);
 			
 			while(true){
@@ -105,7 +109,6 @@ public class GameProcessing{
 				checkCollisions(); 
 				checkPlayerFalling();
 				checkItemsFalling();
-				//checkItemsExploding();
 				checkRemovingObjects();
 				checkCollisions();
 				
@@ -121,10 +124,10 @@ public class GameProcessing{
 				//End Loop
 			}
 			System.out.println("THIS IS DONE");
-			level_builder.setLevel(1);
 		}
 	}
 	
+
 
 	private void checkRemovingObjects() {
 		for(int i=0; i<active_objects.size(); i++){
@@ -383,7 +386,7 @@ public class GameProcessing{
 		//current_level.printGrid();
 		
 		System.out.println("Player Explode");
-		level_int = 1;
+		level_int++;
 		this.restart = true;
 		
 	}
@@ -743,6 +746,18 @@ public class GameProcessing{
     	}
     	return true;
     }
+    
+    /*
+     * Initialize variables before the level starts such as player location and number of coins
+     */
+	private void initializeLevelVariables() {
+		active_objects.clear();
+		this.current_level = level_list.get(level_int).getLevelGrid();
+		this.player = level_list.get(level_int).getPlayer();
+		this.player_x = level_list.get(level_int).getPlayer_x();
+		this.player_y = level_list.get(level_int).getPlayer_y();
+		Coin.setCoin_count(level_list.get(level_int).getCoinCount());
+	}
 }
 
 	

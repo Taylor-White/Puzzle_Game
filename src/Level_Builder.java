@@ -8,18 +8,12 @@ import java.util.Scanner;
 
 public class Level_Builder implements Runnable {
 
-	private GameObjectsGrid current_level_unaltered;
-	private Player player;
-	private int player_x;
-	private int player_y;
-	private int coin_count;
-	private List<GameObject> moving_objects = new ArrayList<GameObject>();
+
 	private final int tiles_in_row;
 	private final int tiles_in_col;
 	private int level_number;
 	
 	private Level_Details this_level;
-	//// ADD THIS LATER ~ Will be an object containing the information about a level so the Game processing can request that object and parse it itself.
 	
 	private boolean lock = false;
 	
@@ -27,37 +21,22 @@ public class Level_Builder implements Runnable {
 	private ImageList imgList;
 
 		
-	public Level_Builder(int tiles_in_row, int tiles_in_col, ImageList il){
+	public Level_Builder(int tiles_in_row, int tiles_in_col, ImageList il, int level_number){
 		//Setup Variables
 		this.tiles_in_row = tiles_in_row;
 		this.tiles_in_col = tiles_in_col;
+		this_level = new Level_Details(null, 0, 0);
 		this.imgList = il;
-		this.level_number = 1;
-		player = null;
-		player_x = 0;
-		player_y = 0;
-		getLevel(level_number);
+		this.level_number = level_number;
+
 	}
 	
-	public void setLevel(int i){
+	public void setLevelNumber(int i){
 		level_number = i;
 	}
 
-	//All these get methonds will not be necessary when I add the Level Details object
-	public GameObjectsGrid getCurrentLevel(){
-		return current_level_unaltered;
-	}
-	public int getPlayerX(){
-		return player_x;
-	}
-	public int getPlayerY(){
-		return player_y;
-	}
-	public Player getPlayer(){
-		return player;
-	}
-	public int getCoinCount(){
-		return coin_count;
+	public Level_Details getLevelDetails(){
+		return this_level;
 	}
 	
 	
@@ -67,7 +46,7 @@ public class Level_Builder implements Runnable {
 		boolean w_error = false;
 
 		GameObjectsGrid level_object = new GameObjectsGrid(tiles_in_row, tiles_in_col);
-		System.out.println("from_file string: \n" + from_file);
+		//System.out.println("from_file string: \n" + from_file);
 		String[] parts = from_file.split("\n");
 		GridCell[][] level_array = new GridCell[tiles_in_col][tiles_in_row];
 		int p_x = 0;
@@ -113,8 +92,9 @@ public class Level_Builder implements Runnable {
 				            	new_cell.add(new Block(img_set, Integer.parseInt(object_char)));
 				            break;
 				            case 'i':  
+				            	object_char = object_char.substring(1);
 				            	img_set = imgList.getIndestructible();
-				            	new_cell.add(new Indestructable(img_set));
+				            	new_cell.add(new Indestructable(img_set, Integer.parseInt(object_char)));
 		            		break;
 				            case 'c':
 				            	//Change this to match with block
@@ -155,7 +135,7 @@ public class Level_Builder implements Runnable {
 				            	img_set = null;
 				            break;
 				        }
-						System.out.println("x: " + x + " and y: " + y);
+						//System.out.println("x: " + x + " and y: " + y);
 						level_array[x][y] = new_cell;
 					} catch (IllegalArgumentException e){
 						System.out.println("Invalid Format");
@@ -164,29 +144,28 @@ public class Level_Builder implements Runnable {
 			}
 		}
 		level_object.setGameObjectGrid(level_array);
-		this.player = p;
-		this.player_x = p_x;
-		this.player_y = p_y;
-		this.coin_count = cc;
-		current_level_unaltered = level_object;
+		this_level.setPlayer(p);
+		this_level.setPlayer_x(p_x);
+		this_level.setPlayer_y(p_y);
+		this_level.setCoinCount(cc);
+		this_level.setLevelGrid(level_object);
 	
-		System.out.println("Level_array: " + level_array);
-		System.out.println("done parsing level...");
+		//System.out.println("Level_array: " + level_array);
+		System.out.println("done parsing level " + level_number + "...");
 		return level_object;
 		
 	}
 			
 	//Gets GameObject[][] from a level number
-	public synchronized GameObjectsGrid getLevel(int level){
+	public synchronized void setLevel(int level){
 		String from_file = getStringFromFile(level);
 		if(from_file != null){
 			GameObjectsGrid level_array = parseLevel(from_file);
-			System.out.println("IN LEVEL BUILDER");
-			level_array.printGrid();
-			return level_array;
-		}else{
-			return null;
+			//System.out.println("IN LEVEL BUILDER");
+			//level_array.printGrid();
+			this_level.setLevelGrid(level_array);
 		}
+		return;
 	}
 	
 	//Get String Array From File
@@ -226,7 +205,7 @@ public class Level_Builder implements Runnable {
 	@Override
 	public void run() {
 		lock = true;
-		current_level_unaltered = getLevel(level_number);
+		setLevel(level_number);
 		lock = false;
 	}
 
