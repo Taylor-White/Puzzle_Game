@@ -35,17 +35,20 @@ public class Coin extends GameObject {
 				idle_timer = 0;
 			}
 		}
-	
 		return;
 	}
 	
 	private void setNextFrame() {
-		if(frame_x < animation_lengths[frame_y]){
-			frame_x++;
+		if(current_frame_delay_counter == 0){
+			if(frame_x < animation_lengths[frame_y]){
+				frame_x++;
+			}else{
+				frame_x = 0;
+			}
+			current_frame_delay_counter = FRAME_DELAY;
 		}else{
-			frame_x = 0;
-		}	
-		//System.out.println("frame_x: " + frame_x);
+			current_frame_delay_counter--;
+		}
 	}
 	
 	public BufferedImage getCurrentImage(){
