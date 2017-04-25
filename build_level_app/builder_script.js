@@ -4,6 +4,8 @@ var CELL_WIDTH = 32;
 var cells_in_row = 32;
 var cells_in_col = 24;
 
+var pallet_length = 15;
+
 var current_x = 1;
 var current_y = 0;
 
@@ -70,11 +72,10 @@ function updateCanvas(canvas, event) {
   //TODO: Create a 2d array to store the information when adding and removing values.  Then a way to output the string to a file
   if(current_x != 0 || current_y != 0){
     cnv.drawImage(objects, current_x * CELL_WIDTH, current_y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT,i*CELL_WIDTH, j*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT  );
-    console.log("game grid add: " + game_grid[i][j]);
     if(game_grid[i][j] != undefined && game_grid[i][j] != ""){
-      game_grid[i][j] = game_grid[i][j].concat(":" + dictionary[current_y*cells_in_row + current_x]);
+      game_grid[i][j] = game_grid[i][j].concat(":" + dictionary[current_y*pallet_length + current_x]);
     }else{
-      game_grid[i][j] = dictionary[current_y*cells_in_row + current_x];
+      game_grid[i][j] = dictionary[current_y*pallet_length + current_x];
     }
   }else{
     cnv.clearRect(i*CELL_HEIGHT, j*CELL_WIDTH, CELL_HEIGHT, CELL_WIDTH);
@@ -140,9 +141,10 @@ function refreshOutput(){
     var output_str = "";
     for(var i = 0; i < cells_in_row; i++) {
       for(var z = 0; z < cells_in_col; z++) {
+        console.log(game_grid[z][i]);
         if(game_grid[z][i] != undefined){
           output_str = output_str.concat(game_grid[z][i] + ",");
-          console.log(game_grid[z][i]);
+          //console.log(game_grid[z][i]);
         }else{
           output_str = output_str.concat(",");
         }
