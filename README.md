@@ -1,10 +1,24 @@
 # Puzzle_Game
 
-A puzzle game I made to practice programming.
+A platformer puzzle game I built to practice programming.
 
-Practiced working with object inheritence, GUI, action listeners, sprites, multiple threads, etc.
+Currently under construction.
 
-The project is currently under construction.
+--------------------------------------------------
+
+How to play:
+
+Your goal is to collect all the coins.  When you collect all of the coins on a map, the door will open.  Enter the door to reach the next level.
+
+Your character can move left and right and climb up and down ladders.  
+
+Your character can also fire a blaster at the downward diagonal adjacent square to your left or right. If the tile you fire at contains a destructable block, the block will dissapear for a short amount of time, and then reappear several seconds later.  You can fire your blaster while standing or climbing.  Some blocks have reinforced cement, and can not be destroyed.  Be careful when digging.  If a block reappears where you are standing, your player will die and the level will restart.
+
+There are items you can pick up. All items are various types of dynamite.  When you pick one up, it is added to your inventory.  When you drop a dynamite from your inventory, it ignites, and will detonate within a few seconds.  Any blocks caught in the explosion will be temporarily destroyed as if they were hit with your blaster.  There are four types of dynamite, and when they explode the explosion shape is different depending on which type it is.  Be careful.  If your player is caught in the explosion the level will restart.
+
+Use the menu to skip around to various levels.  However, there is currently a bug when skipping levels where the game crashes if too many levels are skipped at once.  
+
+There are only currently six levels, but I will add more over time.  I tried to put them in order of increasing difficulty.  Some of the later levels are quite challenging, but they are all possible.
 
 ---------------------------------------------------
 
@@ -20,9 +34,14 @@ Controls:
 * i -> drop second item
 * o -> drop third item
 * p -> drop fourth item
+* x -> self destruct, restart the level
 
-Goal:
+--------------------------------------------------
 
-Collect all coins.  Then exit through open door to go to the next level. You can dig blocks to get coins that are buried.  This game is a puzzle game.  All levels are possible, though some might require some thought.  
+Screenshots:
 
-You can collect items.  Currently the only ones are explosives.  Items can be picked up.  When you drop an explosive it will ignite and detonate after a few seconds blowing up blocks.  Each type of explosive blows up blocks in a different way.  Horizontal ones blow up two blocks to the left and right.  Vertical explosives blow up blocks vertically, the cross shaped explosive blows up blocks both horizontally and vertically.  The short round one blows up every adjacent block.  
+![Screenshot_1](/screenshots/game_screenshot_1.png)
+
+![Screenshot_2](/screenshots/game_screenshot_2.png)
+
+![Screenshot_3](/screenshots/game_screenshot_3.png)
