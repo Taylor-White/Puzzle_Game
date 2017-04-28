@@ -4,6 +4,8 @@ A platformer puzzle game I built to practice programming.
 
 Currently under construction.
 
+Practiced working with object inheritence, GUI, action listeners, sprites, multiple threads, etc.
+
 --------------------------------------------------
 
 How to play:
