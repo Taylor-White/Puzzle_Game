@@ -59,6 +59,6 @@ Features:
 * Hide/Show output text
 * Import levels into the editor
 
-### Screenshots
+### Screenshots:
 
-![Screenshot_1](/build_level_app/screenshots/game_screenshot_1.png)
+![Screenshot_1](/build_level_app/screenshots/level_builder_screenshot_1.png)
