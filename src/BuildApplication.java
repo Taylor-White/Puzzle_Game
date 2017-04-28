@@ -7,8 +7,6 @@ public class BuildApplication extends JFrame {
 	
 	private GameProcessing gameProcessing;
 	private GameView gameView;
-	private final int tiles_in_row = 32;
-	private final int tiles_in_col = 24;
 
 	public BuildApplication(String s) {
 		super(s);
@@ -22,7 +20,7 @@ public class BuildApplication extends JFrame {
 
 	private void setupGameProcessor() {
 		
-		GameProcessing gp = new GameProcessing(tiles_in_row, tiles_in_col, gameView);
+		GameProcessing gp = new GameProcessing(gameView);
 		this.gameProcessing = gp;
 		return;
 	}
@@ -36,7 +34,7 @@ public class BuildApplication extends JFrame {
 		this.setJMenuBar(toolbar.build());
 		
 		//Build Game View
-		gameView = new GameView(tiles_in_row, tiles_in_col);
+		gameView = new GameView();
 		this.add(gameView);
 		
 	    return;

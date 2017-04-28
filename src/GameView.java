@@ -11,11 +11,13 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ActionMap;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.InputMap;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.border.TitledBorder;
 
 
 
@@ -23,6 +25,7 @@ import javax.swing.KeyStroke;
 public class GameView extends JPanel{
 
 	private Graphics2D graphics;
+	
 	
 	private final int ITEM_WINDOW = 2;
 	
@@ -34,8 +37,9 @@ public class GameView extends JPanel{
 	//Canvas Constants
 	private final int PIXELS_IN_TILE_X = 32;
 	private final int PIXELS_IN_TILE_Y = 32;
-	private final int tiles_in_row;
-	private final int tiles_in_col;
+	
+	private final int HEIGHT = PIXELS_IN_TILE_X * 24;
+	private final int WIDTH = PIXELS_IN_TILE_Y * 32;
 
 	//Build Game Objects Container
 	private GameObjectsGrid gameObjectsGrid;
@@ -47,10 +51,7 @@ public class GameView extends JPanel{
 		InputMap inputMap;
 	    ActionMap actionMap;
 	
-	public GameView(int tiles_in_row, int tiles_in_col){
-			//Set Default Values
-			this.tiles_in_row = tiles_in_row;
-			this.tiles_in_col = tiles_in_col;
+	public GameView(){
 		
 			//Set item labels
 			item_label = new ArrayList<JLabel>();
@@ -62,6 +63,7 @@ public class GameView extends JPanel{
 		   //Set up JPanel
 		   this.setSize(getViewSizeX(), getViewSizeY());
 		   this.setOpaque(true);
+		   this.setBackground(new Color(220, 220, 220));
 	       
 	       //Set Key Bindings
 	       inputMap = this.getInputMap();
@@ -144,14 +146,14 @@ public class GameView extends JPanel{
         if (isPreferredSizeSet()) {
             return super.getPreferredSize();
         }
-        return new Dimension(PIXELS_IN_TILE_X * tiles_in_row, PIXELS_IN_TILE_Y * tiles_in_col);
+        return new Dimension(WIDTH, HEIGHT);
     }
 
 	public int getViewSizeX() {
-		return tiles_in_row * PIXELS_IN_TILE_X;
+		return WIDTH;
 	}
 	public int getViewSizeY() {
-		return tiles_in_col * PIXELS_IN_TILE_Y;
+		return HEIGHT;
 	}
 	public KeyActionManager getActionManager() {
 		System.out.println("GameView's view of keyactionmanager: " + keyActionManager.getList().toString());
@@ -160,9 +162,15 @@ public class GameView extends JPanel{
 	}
 	
 	private void setupInventoryWindow(String s) {
+		TitledBorder title =  BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.darkGray),"Inventory");
+		title.setTitle("Inventory");
+		title.setTitleJustification(TitledBorder.CENTER);
+		//(TitledBorder.RIGHT);
+		title.setTitleColor(Color.BLACK);
 		inventory_panel = new JPanel();
-		inventory_panel.setBackground(Color.RED);
+		inventory_panel.setBackground(new Color(165, 165, 165));
 		inventory_panel.setPreferredSize(new Dimension(ITEM_WINDOW*32, ITEM_WINDOW*32));
+		inventory_panel.setBorder(title);
 		
 		JLabel item_1 = new JLabel();
 		JLabel item_2 = new JLabel();

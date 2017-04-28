@@ -1,8 +1,10 @@
+//Pixels in Cell
 var CELL_HEIGHT = 32;
 var CELL_WIDTH = 32;
 
-var cells_in_row = 32;
-var cells_in_col = 24;
+//Cells in row/column
+var cells_in_row;
+var cells_in_col;
 
 var pallet_length = 15;
 
@@ -22,17 +24,29 @@ var isOutput = false;
 var dictionary = {};
 setDictionary();
 
-var game_grid = new Array(cells_in_col);
-for(var i=0; i< cells_in_row; i++)
-  game_grid[i] = new Array(cells_in_row);
+var game_grid;
+
+
+
 
 
 $( document ).ready(function() {
     console.log( "ready!" );  
+
+    //Initialize Variables
+    setCanvasHeight();
+    setCanvasLength();
+    initializeGrid();
     objects = new Image();
     objects.src = './resources/object_sprites.png';
-    setToggle();
-    refreshOutput();
+
+    //Setup onClicks
+    setOutputDisplayToggle();
+    refreshOutputButton();
+    updateDimensions();
+    importClick();
+
+    //Setup Canvas'
     setup_pallet_canvas();
     setup_canvas();
     console.log( "Done!" );  
@@ -42,14 +56,17 @@ $( document ).ready(function() {
 function setup_canvas() {
   canvas = document.getElementById("canvas");
   cnv = canvas.getContext("2d");
-  //Eventually get width and height from config file that the main app will use
-  var width = CELL_WIDTH*15;
-  var height = CELL_HEIGHT*10;
-  canvas.width = width;
-  canvas.height = height;
+  set_canvas_dim();
   canvas.addEventListener("click", onClickCanvas, false);
   return;
 }    
+function set_canvas_dim(){
+  var width = CELL_WIDTH*cells_in_row;
+  var height = CELL_HEIGHT*cells_in_col;
+  console.log("WIDTH: " + width);
+  canvas.width = width;
+  canvas.height = height;
+}
 
 function onClickCanvas(event){
   console.log("onclick canvas");
@@ -68,10 +85,12 @@ function updateCanvas(canvas, event) {
   console.log(current_x);
   console.log(current_y);
 
-
-  //TODO: Create a 2d array to store the information when adding and removing values.  Then a way to output the string to a file
-  if(current_x != 0 || current_y != 0){
+  //Place GameObject in cell
+    if(current_x != 0 || current_y != 0){
     cnv.drawImage(objects, current_x * CELL_WIDTH, current_y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT,i*CELL_WIDTH, j*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT  );
+    if(game_grid[i] == undefined){
+      game_grid[i] = new Array();
+    }
     if(game_grid[i][j] != undefined && game_grid[i][j] != ""){
       game_grid[i][j] = game_grid[i][j].concat(":" + dictionary[current_y*pallet_length + current_x]);
     }else{
@@ -80,9 +99,10 @@ function updateCanvas(canvas, event) {
   }else{
     cnv.clearRect(i*CELL_HEIGHT, j*CELL_WIDTH, CELL_HEIGHT, CELL_WIDTH);
     game_grid[i][j] = "";
-  }
+  } 
   console.log(game_grid[i][j]);
 } 
+
 
 //Pallet Code
 function setup_pallet_canvas() {
@@ -120,8 +140,8 @@ function updateCurrentBrush(event) {
   console.log("finished");
 } 
 
-//output
-function setToggle(){
+//Output Code
+function setOutputDisplayToggle(){
   $("#output_toggle").click(function() {
     console.log("output: " + isOutput);
     if(isOutput){
@@ -136,11 +156,19 @@ function setToggle(){
   });  
 }
 
+function refreshOutputButton(){
+  $("#refresh_output").click(refreshOutput); 
+}
+
 function refreshOutput(){
-  $("#refresh_output").click(function() {
+    console.log("cells in col: " + cells_in_col);
+        console.log("cells in row: " + cells_in_row);
+console.log(game_grid);
     var output_str = "";
-    for(var i = 0; i < cells_in_row; i++) {
-      for(var z = 0; z < cells_in_col; z++) {
+    //TODO: have a 'mapGrid' function where you pass a function and it applies itself to every element in grid
+    for(var i = 0; i < cells_in_col; i++) {
+      for(var z = 0; z < cells_in_row; z++) {
+        console.log("z: " + z + " i: " + i);
         console.log(game_grid[z][i]);
         if(game_grid[z][i] != undefined){
           output_str = output_str.concat(game_grid[z][i] + ",");
@@ -149,14 +177,175 @@ function refreshOutput(){
           output_str = output_str.concat(",");
         }
       }
+      if(cells_in_row > 0){
+        output_str = output_str.slice(0, -1);
+      }
       output_str = output_str.concat("\n");
     }
     console.log("output string: " + output_str);
     $("#output").text(output_str); 
+}
+
+function spliceGrid(){
+  console.log("cells in col: " + cells_in_col);
+  console.log("cells in row: " + cells_in_row);
+
+  console.log("game_grid length: " + game_grid.length);
+  console.log("game_grid[0] length: " + game_grid[0].length);
+
+  console.log("BEFORE SPLICE: ");
+  console.log(game_grid);
+  var game_grid_len = game_grid.length;
+  if(cells_in_row < game_grid_len){
+    game_grid.splice(cells_in_row,game_grid_len);
+  }else if(cells_in_row > game_grid_len){
+    var cells_to_add = cells_in_row - game_grid_len;
+    for(var i=0; i<cells_to_add; i++){
+      game_grid.push(new Array());
+    }  
+  } 
+  game_grid_len = game_grid.length;
+  console.log("after first half of splice");
+  console.log(game_grid);
+  console.log("statistics ");
+  console.log("game_grid.length " + game_grid_len);
+  console.log("cells_in_col " + cells_in_col);
+  for(var i=0; i<game_grid_len; i++){
+    if(cells_in_col < game_grid[i].length){
+      game_grid[i].splice(cells_in_col,game_grid[i].length);
+    }else if(cells_in_col > game_grid[i].length){
+      var cells_to_add = cells_in_col - game_grid[i].length;
+      console.log("cells to add: " + cells_to_add);
+      for(var j=0; j<cells_to_add; j++){
+        console.log("push at: " + j);
+        game_grid[i].push("");
+      }
+    }    
+  }
+  console.log("AFTER SPLICE: ");
+  console.log(game_grid);
+  
+}
+
+function updateDimensions(){
+  $("#update_dims").click(function() {
+    setCanvasHeight();
+    setCanvasLength();
+    spliceGrid();
+    set_canvas_dim();
+    refillCanvasFromGameGrid();
+    refreshOutput();
+  });  
+}  
+
+//Import ~~ Coming soon ~~
+function importStringToGrid(str){
+  //Get Dimensions
+  var rows = str.split(/\r?\n/);
+  var len = 0;
+  var height = 0;
+  for(var i = 0; i < rows.length; i++) {
+    var tmp = 0;
+    var cells = rows[i].split(/,/);
+    for(var z = 0; z < cells.length; z++) {
+      tmp = tmp + 1;
+    }
+    if(tmp > len){
+      len = tmp;
+    }
+    tmp = 0;
+    height = height + 1;
+  }
+  console.log("str len: " + len);
+  console.log("str height: " + height);
+  
+  //Set Canvas Dimensions to match
+  
+  $("#canvas_height").val(height);
+  $("#canvas_length").val(len);
+  setCanvasHeight();
+  setCanvasLength();
+
+  initializeGrid();
+console.log(game_grid);
+  //Fill Grid
+  for(var i = 0; i < rows.length; i++) {
+    var cells = rows[i].split(/,/);
+    for(var j = 0; j < cells.length; j++) {
+      console.log("cell[" + j + "]: " + cells[j]);
+        game_grid[i][j] = cells[j];
+    }
+  }
+  
+  //Display Grid
+  set_canvas_dim();
+  refillCanvasFromGameGrid();
+  
+  //Refresh output
+  refreshOutput();
+}
+
+function refillCanvasFromGameGrid(){
+  console.log("game_grid: ");
+  console.log(game_grid);
+  for(var i = 0; i < cells_in_row; i++) {
+    var row = game_grid[i];
+    for(var j = 0; j < cells_in_col; j++) {
+      console.log("row: " + i + " col: " + j);
+      if(game_grid[i][j] != undefined && game_grid[i][j] != ""){
+        var objects_in_cell = game_grid[i][j].split(":");
+        for(var k = 0; k < objects_in_cell.length; k++){
+          var draw_location = arraySearch(dictionary,objects_in_cell[k]);
+          var pallet_location_x = draw_location % pallet_length;
+          var pallet_location_y = Math.floor(draw_location / pallet_length);
+          if(!(pallet_location_x == 0 && pallet_location_y == 0)){
+            console.log("drawing... object at: " + pallet_location_x + " and " + pallet_location_y);
+            cnv.drawImage(objects, pallet_location_x * CELL_WIDTH, pallet_location_y * CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT,i*CELL_WIDTH, j*CELL_HEIGHT, CELL_WIDTH, CELL_HEIGHT  );
+          } 
+        } 
+      }
+    }
+  }
+}
+
+//Helper for getting key from value in dictionary
+function arraySearch(arr,value) {
+    for (var k=0; k<arr.length; k++)
+        if (arr[k] === value)                    
+            return k;
+    return false;
+  }
+
+function importClick(){
+  $("#import_button").click(function() {
+    var str = $("#import_area").val();
+    console.log("IMPORT STRING: " + str);
+    importStringToGrid(str);
   }); 
 }
 
 
+//Initialize Variables
+function setCanvasHeight(){
+  cells_in_col = $("#canvas_height").val();
+}
+
+function setCanvasLength(){
+  cells_in_row = $("#canvas_length").val();
+}
+
+function initializeGrid(){
+  game_grid = [];
+  for(var i=0; i<cells_in_col; i++){
+    game_grid[i] = [];
+    for(var j=0; j<cells_in_row; j++){
+      game_grid[i][j] = "";
+    }
+  }
+  console.log("after grid has been reset: " );
+  console.log(game_grid);
+      
+}
 
 function setDictionary(){
   //Number on pallet.  Number in Java program
@@ -246,13 +435,15 @@ function setDictionary(){
   dictionary[90] = "p";
   dictionary[91] = "e";
   dictionary[92] = "l";
-  dictionary[93] = "c1";
-  dictionary[94] = "c2";
-  dictionary[95] = "d1";
-  dictionary[96] = "d2";
-  dictionary[97] = "d3";
-  dictionary[98] = "d4";
+  dictionary[93] = "c0";
+  dictionary[94] = "c1";
+  dictionary[95] = "d0";
+  dictionary[96] = "d1";
+  dictionary[97] = "d2";
+  dictionary[98] = "d3";
   dictionary[99] = "i0";
   dictionary[100] = "i1";
   dictionary[101] = "i2";
+
+  dictionary.length = 102
 }

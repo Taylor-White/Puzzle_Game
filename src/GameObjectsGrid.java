@@ -193,6 +193,24 @@ public class GameObjectsGrid {
 			}	
 		}
 	}
+	
+	/*
+	 * Prints the grid cleanly, but only distinguishes between empty and non empty spaces
+	 */
+	public void printBooleanGrid(){
+		System.out.println("Printing Boolean Grid...");
+		for(int i=0; i<gameObjectGrid.length; i++){
+			for(int j=0; j<gameObjectGrid[i].length; j++){
+				if(gameObjectGrid[i][j] != null && gameObjectGrid[i][j].getList().size() != 0){
+					System.out.print("x");
+				}else{
+					System.out.print("_");
+				}
+			}
+			System.out.print("\n");
+		}
+		System.out.println("Done!");
+	}
 
 
 	public void destroy(int x, int y, EnumConsts.Object_Name object) {
@@ -298,8 +316,12 @@ public class GameObjectsGrid {
     	return true;
     }
 
-
-
+    public int getTilesInRow(){
+    	return tiles_in_row;
+	}
+	public int getTilesInCol(){
+		return tiles_in_col;
+	}
 
 
 }

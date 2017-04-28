@@ -56,4 +56,9 @@ public class Level_Details {
 		return level_grid;
 		
 	}
+
+	public int getTilesInCol() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

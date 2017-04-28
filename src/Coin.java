@@ -19,8 +19,9 @@ public class Coin extends GameObject {
 		animation_lengths = new int[2];
 		animation_lengths[0] = 6;
 		animation_lengths[1] = 6;
-		this.frame_y = style;		
-		System.out.println("imgList.getHeight(): " + imgList.getHeight());
+		this.frame_y = style;	
+		
+		//If style number is out of bounds, change style type to default
 		if(imgList.getHeight() < frame_y*TILE_SIZE + TILE_SIZE){
 			this.frame_y = 0;
 		}	

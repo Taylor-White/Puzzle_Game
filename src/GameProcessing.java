@@ -27,10 +27,12 @@ public class GameProcessing{
 	private GameView gameView;
 	
 	//Default Values
-	private final int tiles_in_row;
-	private final int tiles_in_col;
+	private int tiles_in_row;
+	private int tiles_in_col;
 
 	private KeyActionManager keyActionManager;
+	
+	//private ToolBarActions toolBarActions;
 	
 	//Level Stuff
 	private Level_Builder level_builder;
@@ -38,11 +40,7 @@ public class GameProcessing{
 	private boolean restart = false;
 	List<Level_Details> level_list;
 
-	public GameProcessing(int tiles_in_row, int tiles_in_col, GameView gv){
-		//Setup Variables
-		this.tiles_in_row = tiles_in_row;
-		this.tiles_in_col = tiles_in_col;
-		
+	public GameProcessing(GameView gv){
 		//Set Game View
 		this.gameView = gv;
 		
@@ -91,7 +89,7 @@ public class GameProcessing{
 			
 			initializeLevelVariables();
 			gameView.drawing(current_level);
-			
+			current_level.printBooleanGrid();
 			while(true){
 				try {
 					Thread.sleep(50);
@@ -770,6 +768,8 @@ public class GameProcessing{
 		this.player_x = level_list.get(level_int).getPlayer_x();
 		this.player_y = level_list.get(level_int).getPlayer_y();
 		Coin.setCoin_count(level_list.get(level_int).getCoinCount());
+		this.tiles_in_col = this.current_level.getTilesInCol();
+		this.tiles_in_row = this.current_level.getTilesInRow();
 	}
 }
 

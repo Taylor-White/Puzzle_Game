@@ -3,7 +3,7 @@ import java.awt.image.BufferedImage;
 
 public class Block extends GameObject {
 	
-	private final static int RESPAWN_TIME = 96;
+	private final static int RESPAWN_TIME = 128;
 	private int respawn_counter = 0;
 	private int graphics_style_x;
 	private int graphics_style_y;

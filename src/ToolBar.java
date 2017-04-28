@@ -5,12 +5,6 @@ import javax.swing.JMenuItem;
 
 public class ToolBar {
 
-	/*protected JFrame frame;
-	
-	public ToolBar(JFrame f){
-		this.frame = f;
-	}*/
-	
 	public JMenuBar build() {
 		ToolBarActions action = new ToolBarActions();
 		JMenuBar menuBar = new JMenuBar();
@@ -37,6 +31,11 @@ public class ToolBar {
 		//jmiRestart.addActionListener(action.restart());
 		//jmiRestart.addActionListener(action.restart());
 		
+		//Disable any menu items that have not been built yet
+		jmihighScores.setEnabled(false);
+		jmiSmall.setEnabled(false);
+		jmiMedium.setEnabled(false);
+		jmiLarge.setEnabled(false);
 		
 		file.add(jmiRestart);
 		file.add(jmiExit);

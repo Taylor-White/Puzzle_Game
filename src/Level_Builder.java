@@ -9,8 +9,8 @@ import java.util.Scanner;
 public class Level_Builder implements Runnable {
 
 
-	private final int tiles_in_row;
-	private final int tiles_in_col;
+	private int tiles_in_row;
+	private int tiles_in_col;
 	private int level_number;
 	
 	private Level_Details this_level;
@@ -43,8 +43,10 @@ public class Level_Builder implements Runnable {
 	//Convert File Data to GameObject 2D Array
 	private GameObjectsGrid parseLevel(String from_file) {
 		
-		System.out.println("Length of file is: " + getLengthOfGrid(from_file));
 		
+		setDimensionsOfGrid(from_file);
+		System.out.println("Height of file is: " + this.tiles_in_col);
+		System.out.println("Length of file is: " + this.tiles_in_row);
 		boolean h_error = false;
 		boolean w_error = false;
 
@@ -87,7 +89,12 @@ public class Level_Builder implements Runnable {
 						//Convert from char to image using Image List?
 						BufferedImage img_set = null;
 						String object_char = depth[c];
-						char ch = object_char.charAt(0);
+						char ch;
+						try{
+							ch = object_char.charAt(0);
+						}catch(Exception e){
+							ch = ' ';
+						}
 						switch (ch) {
 				            case 'b':  
 				            	object_char = object_char.substring(1);
@@ -152,26 +159,24 @@ public class Level_Builder implements Runnable {
 		
 	}
 			
-	private int getLengthOfGrid(String from_file) {
+	private void setDimensionsOfGrid(String from_file) {
 		int len = 0;
 		int tmp_len = 0;
 		String[] parts = from_file.split("\n");
-		for(int y=0; y<parts.length; y++){ // parts.length //tiles_in_row
+		this.tiles_in_col = parts.length;
+		for(int y=0; y<parts.length; y++){
 			String[] cell;
 			try{
 				cell = parts[y].split(",");
 			}catch(Exception e){
 				cell = new String[]{"_"};
 			}
-			
-			for(int x=0; x<cell.length; x++){ // cell.length //tiles_in_col
-				tmp_len++;
-			}
+			tmp_len = parts[y].length() - cell.length;
 			if(tmp_len > len)
 				len = tmp_len;
 			tmp_len= 0;
 		}
-		return len;
+		this.tiles_in_row = len;
 	}
 
 	//Gets GameObject[][] from a level number
@@ -209,7 +214,7 @@ public class Level_Builder implements Runnable {
 		    while (sc.hasNextLine())
 		    {
 		      line = sc.nextLine();
-		      System.out.println (line);
+		      //System.out.println (line);
 		      sb.append(line);
 		      sb.append("\n");
 		    }

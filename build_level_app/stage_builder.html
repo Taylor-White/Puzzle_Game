@@ -8,12 +8,17 @@
 
 </head>
 <body>
-<h2>Puzzle Game Builder</h2>
-<canvas id="canvas" style="border:1px solid #000"></canvas>
+
+	<h2>Puzzle Game Builder</h2>
+	<canvas id="canvas" style="border:1px solid #000"></canvas>
+	<p>Pallet:</p>
+	<canvas id="tile_canvas" style="border:1px solid #000"></canvas>
 <p>Current Brush:</p>
-<div id="brush_spot"><!--<img id="brush" src="./resources/object_sprites.png" alt="" height="32" width="32">--></div>
-<p>Pallet:</p>
-<canvas id="tile_canvas" style="border:1px solid #000"></canvas>
+<div id="brush_spot"></div>
+<p>Canvas size: <br />Length:<input id="canvas_length" value="24"/> <br />Height: <input id="canvas_height" value="18"/></p>
+<button id="update_dims"> Update Dimensions </button>
+
+
 <p><button id="output_toggle"> Hide Output </button> <button id="refresh_output"> Refresh Output </button></p><div id="output"></div>
 <p>Import:</p>
 <p><textarea id="import_area">
