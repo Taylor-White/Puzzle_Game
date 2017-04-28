@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 @SuppressWarnings("serial")
 public class BuildApplication extends JFrame {
 
-	
+	private ToolBar toolbar;
 	private GameProcessing gameProcessing;
 	private GameView gameView;
 
@@ -20,7 +20,7 @@ public class BuildApplication extends JFrame {
 
 	private void setupGameProcessor() {
 		
-		GameProcessing gp = new GameProcessing(gameView);
+		GameProcessing gp = new GameProcessing(gameView, toolbar);
 		this.gameProcessing = gp;
 		return;
 	}
@@ -30,7 +30,7 @@ public class BuildApplication extends JFrame {
 	public void setupGameView(String s) {
 		
 		//Build ToolBar
-		ToolBar toolbar = new ToolBar();
+		toolbar = new ToolBar();
 		this.setJMenuBar(toolbar.build());
 		
 		//Build Game View

@@ -273,7 +273,7 @@ console.log(game_grid);
     var cells = rows[i].split(/,/);
     for(var j = 0; j < cells.length; j++) {
       console.log("cell[" + j + "]: " + cells[j]);
-        game_grid[i][j] = cells[j];
+        game_grid[j][i] = cells[j];
     }
   }
   

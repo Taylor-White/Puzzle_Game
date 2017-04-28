@@ -176,6 +176,8 @@ public class GameObjectsGrid {
 
 	/*
 	 * Prints the grid
+	 * 
+	 * TODO: Put the whole string in a StringBuilder and print the whole thing at once with Thread ID
 	 */
 	public void printGrid(){
 		System.out.println("Printing Grid...");
@@ -196,6 +198,8 @@ public class GameObjectsGrid {
 	
 	/*
 	 * Prints the grid cleanly, but only distinguishes between empty and non empty spaces
+	 * 
+	 * TODO: Put the whole string in a StringBuilder and print the whole thing at once with Thread ID
 	 */
 	public void printBooleanGrid(){
 		System.out.println("Printing Boolean Grid...");

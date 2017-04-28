@@ -32,7 +32,7 @@ public class GameProcessing{
 
 	private KeyActionManager keyActionManager;
 	
-	//private ToolBarActions toolBarActions;
+	private ToolBarActions toolBarActions;
 	
 	//Level Stuff
 	private Level_Builder level_builder;
@@ -40,12 +40,15 @@ public class GameProcessing{
 	private boolean restart = false;
 	List<Level_Details> level_list;
 
-	public GameProcessing(GameView gv){
+	public GameProcessing(GameView gv, ToolBar tb){
 		//Set Game View
 		this.gameView = gv;
 		
 		//Action Manager
 		this.keyActionManager = gv.getActionManager();
+		this.toolBarActions = tb.getToolbarActionManager();
+		//NULL NEED TO PASS TOOLBAR ACTIONS FROM GAME VIEW OR SOMETHING
+		System.out.println("Toolbaractions class: " + toolBarActions);
 		
 		//Setup Graphics
 		this.imgList = new ImageList();
@@ -96,6 +99,7 @@ public class GameProcessing{
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
+				getMenuAction();
 				input_blocked = player.getLock();
 				adjust_positions();
 				//Fix for Idle Climbing Animation ~~~
@@ -126,6 +130,7 @@ public class GameProcessing{
 		}
 	}
 	
+
 
 
 	private void checkRemovingObjects() {
@@ -342,6 +347,31 @@ public class GameProcessing{
 		}
 	}
 	
+	private void getMenuAction() {
+		EnumConsts.Menu_Action menu_action = toolBarActions.getNextAction();
+		
+		switch (menu_action) {
+			case None:
+			break;
+			case Restart:
+				System.out.println("Menu Action: " + menu_action);
+				this.restart = true;
+				break;
+			case Skip_To_Level:
+				System.out.println("Menu Action: " + menu_action);
+				skipTo();
+				break;
+			default:
+				System.out.println("Invalid action");
+				break;	
+		}
+	}
+	
+
+	private void skipTo() {
+		this.level_int = toolBarActions.getLevel();
+		restart = true;
+	}
 	private void Drop_Item(EnumConsts.Player_Action action, int item_num) {
 		// Use player action to determine which type of dynamite to drop
 		System.out.println("Dropping item");
@@ -390,13 +420,9 @@ public class GameProcessing{
 		gameView.setItemNumber(i,items[i]);
 	}
 	
-	//THIS METHOD IS CURRENTLY BEING USED FOR TESTING ~
+	//Restart Level
 	private void Self_Destruct(EnumConsts.Player_Action action) {
-		// CURRENTLY PRINTS OUT NEXT LEVEL
-		//current_level.printGrid();
-		
 		System.out.println("Player Explode");
-		level_int++;
 		this.restart = true;
 		
 	}

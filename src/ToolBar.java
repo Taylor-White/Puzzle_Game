@@ -4,9 +4,9 @@ import javax.swing.JMenuItem;
 
 
 public class ToolBar {
-
+	private ToolBarActions actionManager;
 	public JMenuBar build() {
-		ToolBarActions action = new ToolBarActions();
+		actionManager = new ToolBarActions();
 		JMenuBar menuBar = new JMenuBar();
 		JMenu file = new JMenu("File");
 		JMenu view = new JMenu("View");
@@ -20,14 +20,22 @@ public class ToolBar {
 		JMenuItem jmiExit = new JMenuItem("Exit");
 
 		JMenuItem jmihighScores = new JMenuItem("High Scores");
+		JMenuItem jmiLevel0 = new JMenuItem("Level 0");
 		JMenuItem jmiLevel1 = new JMenuItem("Level 1");
 		JMenuItem jmiLevel2 = new JMenuItem("Level 2");
 		JMenuItem jmiLevel3 = new JMenuItem("Level 3");
 		JMenuItem jmiLevel4 = new JMenuItem("Level 4");
+		JMenuItem jmiLevel5 = new JMenuItem("Level 5");
 		
-		jmiRestart.addActionListener(new ToolBarActions());
-		jmiExit.addActionListener(new ToolBarActions());
-		jmihighScores.addActionListener(new ToolBarActions());
+		jmiRestart.addActionListener(actionManager);
+		jmiExit.addActionListener(actionManager);
+		jmihighScores.addActionListener(actionManager);
+		jmiLevel0.addActionListener(actionManager);
+		jmiLevel1.addActionListener(actionManager);
+		jmiLevel2.addActionListener(actionManager);
+		jmiLevel3.addActionListener(actionManager);
+		jmiLevel4.addActionListener(actionManager);
+		jmiLevel5.addActionListener(actionManager);
 		//jmiRestart.addActionListener(action.restart());
 		//jmiRestart.addActionListener(action.restart());
 		
@@ -46,15 +54,21 @@ public class ToolBar {
 		
 		levels.add(jmihighScores);
 		levels.addSeparator();
+		levels.add(jmiLevel0);
 		levels.add(jmiLevel1);
 		levels.add(jmiLevel2);
 		levels.add(jmiLevel3);
 		levels.add(jmiLevel4);
+		levels.add(jmiLevel5);
 		
 		menuBar.add(file);
 		menuBar.add(view);
 		menuBar.add(levels);
 		return menuBar;
+	}
+	
+	public ToolBarActions getToolbarActionManager(){
+		return actionManager;
 	}
 	
 }
