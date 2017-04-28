@@ -47,3 +47,18 @@ There are only currently six levels, but I will add more over time.  I tried to 
 ![Screenshot_2](/screenshots/game_screenshot_2.png)
 
 ![Screenshot_3](/screenshots/game_screenshot_3.png)
+
+## Level Builder App
+
+In addition to the game itself, I created a small Javascript app which can build levels using a GUI.  To build a level, click on an icon in the pallet, and then click where you want it on the main canvas.  Use the eraser to remove blocks from a tile. When you are done, click 'Refresh Output' to display the string which represents the level on the canvas.
+
+Features:
+
+* Displays current brush
+* Change dimensions of the level
+* Hide/Show output text
+* Import levels into the editor
+
+### Screenshots
+
+![Screenshot_1](/build_level_app/screenshots/game_screenshot_1.png)
